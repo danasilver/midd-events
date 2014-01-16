@@ -10,6 +10,7 @@ define('DB_DATABASE', 'dsilver_EventsCalandar')
 $con = msql_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect");
 
 ?>
+
 <html>
 <body>
 
