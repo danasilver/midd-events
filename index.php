@@ -25,6 +25,19 @@ mysqli_close($con);
 <body>
 <div class="container">
   <h2>Welcome to Midd Events</h2>
+  <p>
+  <form role="form" action="search.php" method="GET">
+    <div class="row">
+      <div class="form-group col-lg-5 col-md-5 col-sm-5">
+        <input name="event" type="search" class="form-control" id="search" placeholder="Search events">
+      </div>
+    </div>
+  </form>
+  </p>
+
+  <p>
+    <a href="new.php" class="btn btn-primary">Create an event</a>
+  </p>
   <h3>Recent Events</h3>
   <ul>
   <?php
