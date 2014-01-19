@@ -1,2 +1,8 @@
+# Sublime Config Files
 *.sublime-*
+
+# Filesystem
 .DS_Store
+
+# Emacs
+*~

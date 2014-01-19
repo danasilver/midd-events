@@ -6,10 +6,15 @@ define('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
-$events_query = mysqli_query($con, "SELECT * FROM Events");
-$events = mysqli_fetch_all($events_query);
+$events_results = mysqli_query($con, "SELECT * FROM Events");
 
-mysql_close($con);
+$events_array = array();
+while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {
+  $events_array[] = $row;
+}
+
+mysqli_close($con);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,9 +28,9 @@ mysql_close($con);
   <h3>Recent Events</h3>
   <ul>
   <?php
-    foreach ($events as $event) {
-      echo "<li>".$event -> title."</li>";
-    }
+  foreach ($events_array as $event) {
+    echo "<li><a href='event.php?event=" . $event['id'] . "'>"  . $event['title'] . "</a></li>";
+  }
   ?>
   </ul>
 </div>
