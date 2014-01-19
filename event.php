@@ -25,7 +25,8 @@ include "templates/includes/head.php";
 <body>
 
 <div class="container">
-  <h1><?php echo $event['title'] ?></h1>
+  <h2><?php echo $event['title'] ?></h2>
+  <a href="index.php" class="btn btn-link">Back to search</a>
   <div class="row">
     <div class="col-lg-4 col-md-4">
       <img width="100%" height="100%" src="<?php echo $event['photo_url'] ?>">
