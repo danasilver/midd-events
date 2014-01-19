@@ -18,10 +18,10 @@ mysqli_close($con);
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Midd Events</title>
-<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<?php
+$title = "Midd Events";
+include "templates/includes/head.php"
+?>
 <body>
 <div class="container">
   <h2>Welcome to Midd Events</h2>
