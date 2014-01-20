@@ -30,7 +30,13 @@ include "templates/includes/head.php"
     <div class="row">
       <div class="form-group col-lg-5 col-md-5 col-sm-5">
         <input name="event" type="search" class="form-control" id="search" placeholder="Search events">
+        
       </div>
+
+      <div class="col-lg-5 col-md-5 col-sm-5">  
+          <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+
     </div>
   </form>
   </p>
