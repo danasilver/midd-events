@@ -36,7 +36,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" id="title" maxlength="30">
+          <input type="text" class="form-control" name="title" id="title" maxlength="30">
         </div>
       </div>
     </div>
@@ -44,9 +44,9 @@ include "templates/includes/head.php"
     <!-- Location -->
     <div class="form-group">
       <div class="row">
-        <label class="col-sm-2 control-label" for="title">Location</label>
+        <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
-          <input type="text" name="location" id="title" class="form-control" maxlength="30">
+          <input type="text" name="location" id="location" class="form-control" maxlength="30">
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@ include "templates/includes/head.php"
     <!-- Organization -->
     <div class="form-group">
       <div class="row">
-        <label class="col-sm-2 control-label" for="title">Organization</label>
+        <label class="col-sm-2 control-label" for="orgs">Organization</label>
         <div class="col-sm-4">
           <select name="orgs" class="form-control">
           <?php foreach ($orgs as $org) { ?>
@@ -68,7 +68,7 @@ include "templates/includes/head.php"
     <!-- Categories -->
     <div class="form-group form-group-category">
       <div class="row">
-        <label class="col-sm-2 control-label" for="title">Categories</label>
+        <label class="col-sm-2 control-label" for="cats">Categories</label>
         <div class="col-sm-4" data-toggle="buttons">
           <?php foreach ($cats as $cat) { ?>
             <label for="cats" class="btn btn-default btn-category">
