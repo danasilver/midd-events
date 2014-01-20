@@ -46,7 +46,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
-          <input type="text" name="location" id="location" class="form-control" maxlength="30">
+          <input type="text" name="location" id="location" class="form-control" maxlength="100">
         </div>
       </div>
     </div>
@@ -85,7 +85,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
-          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="30">
+          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="100">
         </div>
       </div>
     </div>
