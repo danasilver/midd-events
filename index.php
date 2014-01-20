@@ -25,6 +25,7 @@ include "templates/includes/head.php"
 <body>
 <div class="container">
   <h2>Welcome to Midd Events</h2>
+  <!--
   <p>
   <form role="form" action="search.php" method="GET">
     <div class="row">
@@ -34,7 +35,7 @@ include "templates/includes/head.php"
     </div>
   </form>
   </p>
-
+  -->
   <p>
     <a href="new.php" class="btn btn-primary">Create an event</a>
   </p>
