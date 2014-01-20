@@ -30,7 +30,7 @@ include "templates/includes/head.php"
 <div class="container">
   <h2>Create a new event</h2>
   <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
-  <form class="form-horizontal col-sm-12 event-form" role="form" method="POST">
+  <form action="insert.php" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
     <!-- Title -->
     <div class="form-group">
       <div class="row">
