@@ -12,7 +12,7 @@ $date = date('Y/m/d h:i:s', time());
 
 $sql = "INSERT INTO Users (username, full_name, is_admin, joined, password, email)
 VALUES
-('$_POST[username]','$_POST[full_name]','1','$date','$_POST[password]','POST[email]')";
+('$_POST[username]','$_POST[full_name]','1','$date','$_POST[password]','$_POST[email]')";
 
 if (!mysqli_query($con, $sql)) {
     die('Error: ' . mysqli_error($con));
