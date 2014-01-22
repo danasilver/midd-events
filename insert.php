@@ -10,7 +10,6 @@ $sql = "INSERT INTO Events (title, description, is_approved, photo_url, location
 VALUES
 ('$_POST[title]','$_POST[description]','1','$_POST[photo_url]','$_POST[location]','$_POST[event_date]', 'chucknorris')";
 
-$sql2
 
 if (!mysqli_query($con, $sql)) {
   die('Error: ' . mysqli_error($con));
