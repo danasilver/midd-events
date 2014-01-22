@@ -4,7 +4,7 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$keyword = $_GET["event"];
+$keyword = $_GET["q"];
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
 $search_results = mysqli_query($con, "SELECT * FROM Events WHERE title LIKE '%$keyword%' ORDER BY event_date DESC");
