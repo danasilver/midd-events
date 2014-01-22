@@ -4,7 +4,7 @@ define ('DB_USERNAME', 'dsilver');
 define ('DB_PASSWORD', 'dsilver122193');
 define ('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$event_id = $_GET["event"];
+$event_id = htmlspecialchars($_GET["event"]);
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
@@ -46,21 +46,6 @@ include "templates/includes/head.php";
 </div>
 <?php
 
-
-
-/*Event name: echo $event -> title;
-Description: echo $event -> description;
-Where is it? echo $event -> location;
-When? echo $event -> event_date;
-Who is the host? echo $event -> host;
-$cats = mysqli_query("SELECT i.category FROM categorized_in i, Events e WHERE $_GET["Eventid"] = e.id");
-
-while ($row = mysqli_fetch_field($cats))
-{
-	echo $row['category'] . " "; 
-	echo "<br>";
-}
-*/
 ?>
 
 </body>
