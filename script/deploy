@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo Connecting to server . . .
+ssh dsilver@basin.cs.middlebury.edu "cd public_html/midd-events &&
+
+echo 
+echo Pulling latest master . . . &&
+git pull origin master"
