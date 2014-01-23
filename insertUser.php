@@ -4,25 +4,33 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect");
+$con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect");
 
-
-date_default_timezone_set('America/New_York');
-$date = date('Y/m/d h:i:s', time());
-
-$sql = "INSERT INTO Users (username, full_name, is_admin, joined, password, email)
+$stmt = $con->prepare("INSERT INTO Users (username, full_name, joined, password, email)
 VALUES
-('$_POST[username]','$_POST[full_name]','1','$date','$_POST[password]','$_POST[email]')";
+(?, ?, ?, ?, ?)");
 
-if (!mysqli_query($con, $sql)) {
-    die('Error: ' . mysqli_error($con));
+if (!$stmt) {
+	echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
 }
-?>
 
-    <script>
-        window.location.href = "index.php"
-    </script>
+if (!$stmt->bind_param('sssss', $username, $full_name, $joined, $password, $email)) {
+	echo "Binding failed: " . $stmt->errno . $stmt->error;
+}
+$username = htmlspecialchars($_POST['username']);
+$full_name = htmlspecialchars($_POST['full_name']);
+$joined = htmlspecialchars(date('Y/m/d h:i:s', time()));
+$password = htmlspecialchars($_POST['password']);
+$email = htmlspecialchars($_POST['email'] . '@middlebury.edu');
 
-<?php
-mysql_close($con);
+if (!$stmt->execute()) {
+	echo "Execute failed: " . $stmt->errno . $stmt->error;
+}
+
+$stmt->close();
+
+header('Location: ' . 'index.php');
+die();
+
+$con->close();
 ?>
