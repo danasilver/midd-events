@@ -54,7 +54,7 @@ include "templates/includes/head.php"
             <div class="row">
                 <label class="col-sm-2 control-label" for="pass">Password</label>
                 <div class="col-sm-4">
-                    <input type="text" name="password" id="pass" class="form-control" maxlength="64">
+                    <input type="password" name="password" id="pass" class="form-control" maxlength="64">
                 </div>
             </div>
         </div>
