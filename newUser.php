@@ -43,12 +43,25 @@ include "templates/includes/head.php"
 
     <!-- must secure the password-->
 
+<<<<<<< HEAD
     <!-- Password -->
     <div class="form-group">
       <div class="row">
         <label class="col-sm-2 control-label" for="pass">Password</label>
         <div class="col-sm-4">
           <input type="password" name="password" id="pass" class="form-control" maxlength="64">
+=======
+        <!-- must secure the password-->
+
+        <!-- Password -->
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2 control-label" for="pass">Password</label>
+                <div class="col-sm-4">
+                    <input type="password" name="password" id="pass" class="form-control" maxlength="64">
+                </div>
+            </div>
+>>>>>>> 7f8000dc18285b6dd73fc313fe194027f9d3cdb4
         </div>
       </div>
     </div>
