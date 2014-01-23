@@ -10,6 +10,12 @@ $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
 $event = mysqli_fetch_array($result);
 
+$cat_results = mysqli_query($con, "SELECT category FROM categorized_in WHERE event = $event_id
+ORDER BY category");
+$cats = array();
+while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
+  $cats[] = $row['category'];
+}
 mysqli_close($con);
 
 ?>
@@ -38,6 +44,17 @@ include "templates/includes/head.php";
       <h4 class="hidden-xs"><?php echo $event['location'] ?></h4>
       <h4>Created by: <?php echo $event['host'] ?></h4>
       <p><?php echo $event['description'] ?></p>
+      <h4>Categories</h4>
+      <ul>
+      <?php foreach ($cats as $cat) { ?>
+      <li>
+        <a href="search.php?q=<?php echo $cat ?>">
+          <?php echo $cat ?>
+        </a>
+      </li>
+      <?php } ?>
+      </ul>
+
     </div>
   </div>
 </div>
