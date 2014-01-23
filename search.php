@@ -4,10 +4,32 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$keyword = htmlspecialchars($_GET["q"]);
+$query = htmlspecialchars($_GET["q"]);
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
-$search_results = mysqli_query($con, "SELECT * FROM Events WHERE title LIKE '%$keyword%' ORDER BY event_date DESC");
+$starttime = microtime(true);
+
+$search_results = mysqli_query($con, "SELECT * 
+                                      FROM Events
+                                      WHERE title LIKE '%$query%'
+                                      AND event_date >= now()
+
+                                      UNION
+                                      SELECT *
+                                      FROM Events
+                                      WHERE location LIKE '%$query%'
+                                      AND event_date >= now()
+
+                                      UNION
+                                      SELECT *
+                                      FROM Events
+                                      WHERE description LIKE '%$query%'
+                                      AND event_date >= now()
+
+                                      ORDER BY event_date ASC");
+
+$endtime = microtime(true);
+$duration = round($endtime - $starttime, 4);
 
 $search_array = array();
 while ($row = mysqli_fetch_array($search_results, MYSQLI_ASSOC)) {
@@ -27,35 +49,50 @@ include "templates/includes/head.php"
 
 <body>
 <div class="container">
-  <h2>Results</h2>
+
+    <h2>Results for <a href="search.php?q=<?php echo $query ?>"><?php echo $query ?></a></h2>
     <p>
       <?php 
       if ($num_results == 0) {
-        echo "Your search returned 0 results";
+        echo "0 results in " . $duration . " seconds.";
       } elseif ($num_results == 1){
-        echo "Your search returned 1 result";
+        echo "1 result in " . $duration . " seconds.";
       } else {
-        echo "Your search returned " . $num_results . " result(s)"; 
+        echo $num_results . " results in " . $duration . " seconds."; 
       }
-        ?>       
+      ?>       
         
     </p>
-  <ul>
-  <?php
-  foreach ($search_array as $event) {
-  ?>
-  <li>
-    <a href="event.php?event=<?php echo $event['id'] ?>">
-      <?php $phpdate = strtotime($event['event_date']) ?>
 
-      <strong><?php echo date('M j, Y', $phpdate) ?></strong>
-      &nbsp;<?php echo $event['title'] ?>
-    </a>
-  </li>
-  <?php
-  }
-  ?>
-  </ul>
+    <p><a href="index.php">Back to search</a></p>
+
+    <ul class="search-results col-lg-8 col-md-8">
+    <?php
+    foreach ($search_array as $event) {
+    ?>
+    <li class="search-item">
+      <a href="event.php?event=<?php echo $event['id'] ?>">
+        <h3><?php echo $event['title'] ?></h3></a>
+        <div class="item-detail">
+          <p>
+            <div><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])) ?></div>
+            <div><?php echo $event['location']; ?></div>
+          </p>
+          <p>
+          <?php
+          echo substr($event['description'], 0, 250);
+          if (strlen($event['description']) > 250){
+            echo '...';
+          };
+          ?>
+          </p>
+
+        </div>
+    </li>
+    <?php
+    }
+    ?>
+    </ul>
 
 </div>
 
