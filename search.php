@@ -4,29 +4,44 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
+$con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
+
+$search_stmt = $con->prepare("SELECT * 
+                              FROM Events
+                              WHERE title LIKE CONCAT('%',?,'%')
+                              AND event_date >= now()
+
+                              UNION
+                              SELECT *
+                              FROM Events
+                              WHERE location LIKE CONCAT('%',?,'%')
+                              AND event_date >= now()
+
+                              UNION
+                              SELECT *
+                              FROM Events
+                              WHERE description LIKE CONCAT('%',?,'%')
+                              AND event_date >= now()
+
+                              ORDER BY event_date ASC");
+
 $query = htmlspecialchars($_GET["q"]);
-$con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
+
+if (!$search_stmt)  {
+  echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+
+if (!$search_stmt->bind_param('sss', $query, $query, $query)) {
+  echo "Binding failed: (" . $search_stmt->errno . ") " . $search_stmt->error;
+}
 
 $starttime = microtime(true);
 
-$search_results = mysqli_query($con, "SELECT * 
-                                      FROM Events
-                                      WHERE title LIKE '%$query%'
-                                      AND event_date >= now()
+if (!$search_stmt->execute()) {
+  echo "Execute failed: " . $search_stmt->errno . $search_stmt->error;
+}
 
-                                      UNION
-                                      SELECT *
-                                      FROM Events
-                                      WHERE location LIKE '%$query%'
-                                      AND event_date >= now()
-
-                                      UNION
-                                      SELECT *
-                                      FROM Events
-                                      WHERE description LIKE '%$query%'
-                                      AND event_date >= now()
-
-                                      ORDER BY event_date ASC");
+$search_results = $search_stmt->get_result();
 
 $endtime = microtime(true);
 $duration = round($endtime - $starttime, 4);
@@ -35,11 +50,14 @@ $search_array = array();
 while ($row = mysqli_fetch_array($search_results, MYSQLI_ASSOC)) {
   $search_array[] = $row;
 }
+
 $num_results = count($search_array);
 
-mysqli_close($con);
+$search_stmt->close();
 
+$con->close();
 ?>
+
 <!DOCTYPE html>
 <html>
 <?php
