@@ -72,7 +72,7 @@ include "templates/includes/head.php"
         <div class="col-sm-4" data-toggle="buttons">
           <?php foreach ($cats as $cat) { ?>
             <label for="cats" class="btn btn-default btn-category">
-              <input name="cats" type="checkbox" id="cats" value="<?php echo $cat ?>">
+              <input name="cats[]" type="checkbox" id="cats" value="<?php echo $cat ?>">
               <?php echo $cat ?>
             </label>
           <?php } ?>

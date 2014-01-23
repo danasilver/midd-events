@@ -32,10 +32,7 @@ CREATE TABLE Events (
      created_date DATETIME NOT NULL
      host CHAR(20) NOT NULL,
      FOREIGN KEY (host) REFERENCES Users
-     ON DELETE CASCADE,
-     cat_names CHAR(40) NOT NULL,
-     FOREIGN KEY (cat_names) REFERENCES Categories
-     ON DELETE CASCADE,
+     ON DELETE CASCADE ON UPDATE RESTRICT ,
      PRIMARY KEY (id)
 )
 
