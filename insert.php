@@ -39,6 +39,5 @@ $stmt->close();
 header('Location: ' . 'event.php?event=' . $con->insert_id);
 die();
 
-<?php
 $con->close();
 ?>
