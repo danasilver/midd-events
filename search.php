@@ -71,8 +71,7 @@ include "templates/includes/head.php"
     foreach ($search_array as $event) {
     ?>
     <li class="search-item">
-      <a href="event.php?event=<?php echo $event['id'] ?>">
-        <h3><?php echo $event['title'] ?></h3></a>
+      <h3><a href="event.php?event=<?php echo $event['id'] ?>"><?php echo $event['title'] ?></a></h3>
         <div class="item-detail">
           <p>
             <div><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])) ?></div>
