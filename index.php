@@ -74,7 +74,7 @@ include "templates/includes/head.php"
     <?php
     foreach (array_slice($events_with_photos, 0, 5) as $i=>$event) {
     ?>
-      <li data-target="#carousel-example-generic" data-slide-to="<?php echo $i; ?>" class="<?php if ($i == 0) { echo " active"; }; ?>"></li>
+      <li data-target="#events-carousel" data-slide-to="<?php echo $i; ?>" class="<?php if ($i == 0) { echo " active"; }; ?>"></li>
     <?php
     }
     ?>
