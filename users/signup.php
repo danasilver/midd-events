@@ -6,6 +6,35 @@ define('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
+
+if (isset($_POST['register']) && !empty($_POST['register'])){
+
+
+    $encrypted_txt = crypt($_POST['password']);
+
+    date_default_timezone_set('America/New_York');
+    $date = date('Y/m/d h:i:s', time());
+
+    $sql = "INSERT INTO Users (username, full_name, is_admin, joined, password, email)
+                VALUES('$_POST[username]','$_POST[full_name]','1','$date','$encrypted_txt','$_POST[email]')";
+
+
+
+    if (!mysqli_query($con, $sql)) {
+        die('Error: ' . mysqli_error($con));
+    }
+    ?>
+
+    <script>
+        window.location.href = "index.php"
+    </script>
+
+<?php
+}
+
+
+?>
+
 mysqli_close($con);
 ?>
 <!DOCTYPE html>
@@ -23,7 +52,7 @@ include "../templates/includes/navbar.php";
 ?>
 <div class="container">
   <h2>Registration</h2>
-  <form action="insertUser.php" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
+  <form action="signup.php" class="form-horizontal col-sm-12 event-form"  method="POST">
 
 
     <!-- Username -->
@@ -55,6 +84,16 @@ include "../templates/includes/navbar.php";
         </div>
       </div>
     </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+          <div class="row">
+              <label class="col-sm-2 control-label" for="confirm_pass">Password</label>
+              <div class="col-sm-4">
+                  <input type="password" name="confirm_password" id="confirm_pass" class="form-control" maxlength="64"
+              </div>
+          </div>
+      </div>
 
     <!-- Email -->
     <div class="form-group">
