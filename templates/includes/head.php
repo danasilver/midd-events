@@ -1,8 +1,12 @@
+<?php
+if (!isset($static_prefix)) {
+  $static_prefix = "";
+}
+?>
 <head>
 <title><?php echo $title ?></title>
-<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="static/css/main.css" rel="stylesheet">
-
-<script src="static/js/jquery-1.10.2.min.js"></script>
-<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="<?php echo $static_prefix; ?>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<?php echo $static_prefix; ?>static/select2/select2.css" rel="stylesheet">
+<link href="<?php echo $static_prefix; ?>static/css/main.css" rel="stylesheet">
 </head>

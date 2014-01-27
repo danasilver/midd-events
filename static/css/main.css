@@ -1,7 +1,129 @@
+/********************
+ * event.php
+ ********************/
+
 .event-form .form-group-category {
   margin-bottom: 10px;
 }
 
 .event-form .form-group-category .btn-category {
   margin-bottom: 5px;
+}
+
+.return-home {
+  display: block;
+  margin-bottom: 15px;
+}
+
+/********************
+ * search.php
+ ********************/
+
+.search-results {
+  padding: 0;
+}
+
+.search-item {
+  list-style: none;
+}
+
+.search-item .item-detail {
+  margin: 10px;
+}
+
+/********************
+ * index.php
+ ********************/
+
+.index-header {
+  margin-top: 20px;
+}
+
+/*.index-header a[href='new.php'] {
+  width: 100%;
+}*/
+
+.index-header li:last-child {
+  padding-right: 0;
+}
+
+@media (max-width: 991px) {
+  .index-header form {
+    margin-top: 15px;
+  }
+}
+
+.form-search {
+  margin-top: 20px;
+}
+
+.carousel-inner {
+  background-color: rgba(0, 0, 0, .8);
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.carousel-inner .item {
+  height: 250px;
+}
+
+.carousel-inner .item .carousel-img-wrapper {
+  position: relative;
+  height: 250px;
+  padding-right: 0;
+}
+
+@media (max-width: 1199px) {
+  .carousel-inner .item .carousel-img-wrapper {
+    width: 470px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .carousel-inner .item .carousel-img-wrapper {
+    width: 570px;
+  }
+}
+
+.carousel-inner .item .carousel-img-wrapper img {
+  width: 100%;
+}
+
+.carousel-inner .item .carousel-img-wrapper .img-overlay {
+  content: " ";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 75%;
+  background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0.85) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0.85) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(0,0,0,.85) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=1 ); /* IE6-9 */
+}
+
+.carousel-inner .item .carousel-description {
+  height: 250px;
+  padding-left: 0;
+}
+
+.carousel-inner .item .carousel-description h1,
+.carousel-inner .item .carousel-description h2 {
+  margin-left: 20px;
+}
+
+/********************
+ * navbar.php
+ ********************/
+
+.navbar-brand-link {
+  color: #333;
+  text-decoration: none;
+}
+.navbar-brand-link:hover {
+  color: #333;
+  text-decoration: none;
 }
