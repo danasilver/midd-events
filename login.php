@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $con->close();
 
     if (crypt($input_password, $fetched_password) == $fetched_password) {
+      session_start();
+      $_SESSION["username"] = $input_username;
       header('Location: index.php');
       die();
     }
