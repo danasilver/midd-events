@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $input_fullName = $_POST['fullName'];
     $input_password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
+    $email = $_POST['email'];
 
     empty($input_username) && $errors["username"] = "This field is required.";
     empty($input_fullName) && $errors["fullName"] = "This field is required.";
@@ -137,21 +138,20 @@ include "../templates/includes/navbar.php";
       </div>
 
     <!-- Email -->
-      <div class="form-group<?php if (array_key_exists("email", $errors)) { echo " has-error"; } ?>">
-          <div class="row">
-              <label class="col-sm-2 control-label" for="email">Email</label>
-              <div class="col-sm-4">
-                  <div class="input-group">
-                    <input type="text" name="email" id="email" class="form-control" maxlength="20" tabindex="2" >
-                    <span class="input-group-addon">@middlebury.edu</span>
-                  </div>
-                    <value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>">
-                  <?php if (array_key_exists("email", $errors)) { ?>
-                      <span class="help-block"><?php echo $errors["email"]; ?></span>
-                  <?php } ?>
-              </div>
+    <div class="form-group<?php if (array_key_exists("email", $errors)) { echo " has-error"; } ?>">
+      <div class="row">
+        <label class="col-sm-2 control-label" for="email">Email</label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input type="text" name="email" id="email" class="form-control" maxlength="45" tabindex="4" autocomplete="off">
+            <span class="input-group-addon">@middlebury.edu</span>
           </div>
+            <?php if (array_key_exists("email", $errors)) { ?>
+                <span class="help-block"><?php echo $errors["email"]; ?></span>
+            <?php } ?>
+        </div>
       </div>
+    </div>
 
     <div class="form-group">
       <div class="row">
