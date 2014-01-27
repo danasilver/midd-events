@@ -70,18 +70,22 @@ include "templates/includes/head.php"
         </div>
       </div>
 
+      <div class="col-md-1">
+      <button id="searchFilterToggle" type="button" data-toggle="button" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span></button>
+      </div>
+
 
     </form>
 
     <?php if (array_key_exists("username", $_SESSION)) { ?>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <ul class="list-unstyled list-inline pull-right">
         <li><a href="new.php" class="btn btn-primary">New Event</a></li>
         <li><a href="logout.php" class="btn btn-default"><span class="glyphicon glyphicon-off"></span></a></li>
       </ul>
     </div>
     <?php } else { ?>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <ul class="list-unstyled list-inline pull-right">
         <li><a href="login.php" class="btn btn-default">Login</a></li>
         <li><a href="newUser.php" class="btn btn-primary">Sign up</a></li>
@@ -91,10 +95,10 @@ include "templates/includes/head.php"
 
     </div>
 
-    <div class="form-group">
+    <div id="searchFilter" class="form-group hide">
       <div class="row">
         <div class="col-md-3 col-md-offset-3">
-          <select name="o[]" multiple class="form-control">
+          <select name="o[]" multiple class="form-control" id="searchOrg">
           <?php foreach ($orgs as $org) { ?>
             <option value="<?php echo $org ?>"><?php echo $org ?></option>
           <?php } ?>
@@ -102,7 +106,7 @@ include "templates/includes/head.php"
         </div>
 
         <div class="col-md-3">
-          <select name="c[]" multiple class="form-control">
+          <select name="c[]" multiple class="form-control" id="searchCat">
           <?php foreach ($cats as $cat) { ?>
             <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
           <?php } ?>
@@ -110,16 +114,6 @@ include "templates/includes/head.php"
         </div>
       </div>
     </div>
-
-    <script>
-    $("select[name='o[]']").select2({
-      placeholder: "Filter by organization..."
-    });
-    $("select[name='c[]']").select2({
-      placeholder: "Filter by category..."
-    });
-    </script>
-
     </form>
 
   <div id="events-carousel" class="carousel slide hidden-sm hidden-xs">
@@ -153,11 +147,6 @@ include "templates/includes/head.php"
       ?>
     </div>
   </div>
-  <script>
-  $("#events-carousel").carousel({
-    interval: 10000
-  });
-  </script>
 
   <div class="row">
     <div class="col-lg-4 col-md-4">
@@ -193,5 +182,6 @@ include "templates/includes/head.php"
     </div>
   </div>
 </div>
+<?php include 'templates/includes/scripts.php' ?>
 </body>
 </html>

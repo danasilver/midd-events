@@ -73,6 +73,18 @@
   padding-right: 0;
 }
 
+@media (max-width: 1199px) {
+  .carousel-inner .item .carousel-img-wrapper {
+    width: 470px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .carousel-inner .item .carousel-img-wrapper {
+    width: 570px;
+  }
+}
+
 .carousel-inner .item .carousel-img-wrapper img {
   width: 100%;
 }
