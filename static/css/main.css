@@ -43,6 +43,10 @@
   width: 100%;
 }
 
+.index-header li:last-child {
+  padding-right: 0;
+}
+
 @media (max-width: 991px) {
   .index-header form {
     margin-top: 15px;

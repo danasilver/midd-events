@@ -45,11 +45,11 @@ include "templates/includes/head.php"
 <body>
 <div class="container">
   <div class="row index-header">
-    <div class="col-lg-6 col-md-6">
-      <span class="h2">Welcome to Midd Events</span>
+    <div class="col-md-3">
+      <span class="h2">Midd Events</span>
     </div>
 
-    <div class="col-lg-4 col-md-4">
+    <div class="col-md-4 col-md-offset-1">
       <form role="form" class="" action="search.php" method="GET">
         <div class="form-group">
           <div class="input-group">
@@ -62,8 +62,15 @@ include "templates/includes/head.php"
       </form>
     </div>
 
-    <div class="col-lg-2 col-md-2">
-      <a href="new.php" class="btn btn-primary">Create an event</a>
+    <!-- <div class="col-md-2 col-md-offset-1">
+      <a href="new.php" class="btn btn-default">New event</a>
+    </div> -->
+
+    <div class="col-md-4">
+    <ul class="list-unstyled list-inline pull-right">
+      <li><a href="#" class="btn btn-default">Login</a></li>
+      <li><a href="newUser.php" class="btn btn-primary">Sign up</a></li>
+    </ul>
     </div>
 
 
