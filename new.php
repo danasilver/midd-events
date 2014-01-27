@@ -4,7 +4,7 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
+$con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
 $org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
 $orgs = array();
@@ -12,14 +12,107 @@ while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
   $orgs[] = $row['name'];
 }
 
+
 $cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
 $cats = array();
 while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['name'];
 }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, host)
+    VALUES
+    (?, ?, ?, ?, ?, ?)");
 
-mysqli_close($con);
+  if (!$stmt)  {
+    echo "First prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  }
+
+
+  if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, $date, $host)) {
+    echo "First binding failed: " . $stmt->errno . $stmt->error;
+  }
+
+  function clean_data($data)
+  {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
+  function insert_category($cat) {
+    global $con;
+    global $eventid;
+    $cat = htmlspecialchars($cat);
+    $stmt2 = $con->prepare("INSERT INTO categorized_in (event, category)
+    VALUES
+    (?, ?)");
+
+    if (!$stmt2) {
+      echo "Second prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+
+    if (!$stmt2->bind_param('is', $eventid, $cat)) {
+      echo "Second binding failed: " . $stmt2->errno . $stmt2->error;
+    }
+
+    if (!$stmt2->execute()) {
+        echo "Execute failed: " . $stmt2->errno . $stmt2->error;
+    }
+
+    $stmt2->close();
+  }
+
+
+  $title = clean_data($_POST['title']);
+  $desc = clean_data($_POST['description']);
+  $photo_url = clean_data($_POST['photo_url']);
+  $location = clean_data($_POST['location']);
+  $date = clean_data($_POST['event_date']);
+  $host = "chucknorris"; # change to current user
+  $categories = array();
+  $categories = $_POST['cats'];
+  $org = htmlspecialchars($_POST['orgs']);
+
+
+
+
+  if (!$stmt->execute()) {
+    echo "Execute failed: " . $stmt->errno . $stmt->error;
+  }
+  $eventid = $con->insert_id;
+  $stmt->close();
+
+  $stmt3 = $con->prepare("INSERT INTO organizer (org, event)
+  VALUES
+  (?, ?)");
+
+  if (!$stmt3)  {
+      echo "Third prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  }
+  if (!$stmt3->bind_param('si', $org, $eventid)) {
+    echo "Third binding failed: " . $stmt3->errno . $stmt3->error;
+  }
+  if (!$stmt3->execute()) {
+      echo "Execute failed: " . $stmt3->errno . $stmt3->error;
+    }
+
+  $stmt3->close();
+
+  foreach ($categories as $category) {
+    insert_category($category);
+  }
+
+
+
+  header('Location: ' . 'event.php?event=' . $eventid);
+  die();
+}
+
+$con->close();
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <?php
@@ -30,7 +123,7 @@ include "templates/includes/head.php"
 <div class="container">
   <h2>Create a new event</h2>
   <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
-  <form action="insert.php" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
+  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
     <!-- Title -->
     <div class="form-group">
       <div class="row">
