@@ -4,11 +4,12 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
+$errors = array();
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
   $input_username = $_POST['username'];
   $input_password = $_POST['password'];
 
-  $errors = array();
   empty($input_username) && $errors["username"] = "This field is required.";
   empty($input_password) && $errors["password"] = "This field is required.";
 

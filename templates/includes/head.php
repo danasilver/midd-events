@@ -1,3 +1,8 @@
+<?php
+if (!isset($static_prefix)) {
+  $static_prefix = "";
+}
+?>
 <head>
 <title><?php echo $title ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

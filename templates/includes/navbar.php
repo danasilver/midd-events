@@ -1,3 +1,27 @@
+<?php
+
+$con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
+//Get all organizations
+$org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
+$orgs = array();
+while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
+  $orgs[] = $row['name'];
+}
+// Get all categories
+$cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
+$cats = array();
+while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
+  $cats[] = $row['name'];
+}
+
+if (!isset($index_prefix)) {
+  $index_prefix = "";
+}
+
+if (!isset($in_users)) {
+  $in_users = false;
+}
+?>
 <nav class="navbar navbar-default" role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
@@ -34,7 +58,7 @@
             </button>
           </div>
 
-          <?php if (array_key_exists("username", $_SESSION)) { ?>
+          <?php if (isset($_SESSION["username"])) { ?>
           <div class="col-md-3">
             <ul class="list-unstyled list-inline pull-right">
               <li><a href="<?php echo $index_prefix; ?>new.php" class="btn btn-primary">New Event</a></li>
@@ -55,7 +79,7 @@
           <div id="searchFilter" class="form-group hide">
             <div class="row">
 
-              <div class=" form-group col-md-3 col-md-offset-3">
+              <div class="form-group col-md-3 col-md-offset-3">
                 <select name="o[]" multiple class="form-control" id="searchOrg">
                 <?php foreach ($orgs as $org) { ?>
                   <option value="<?php echo $org ?>"><?php echo $org ?></option>

@@ -19,11 +19,11 @@ while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {
 }
 
 //Get all organizations
-$org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
-$orgs = array();
-while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
-  $orgs[] = $row['name'];
-}
+// $org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
+// $orgs = array();
+// while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
+//   $orgs[] = $row['name'];
+// }
 
 // Get all events with photos
 $events_with_photos = array();
@@ -33,12 +33,12 @@ foreach ($events_array as $event) {
   }
 }
 
-// Get all categories
-$cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
-$cats = array();
-while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
-  $cats[] = $row['name'];
-}
+// // Get all categories
+// $cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
+// $cats = array();
+// while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
+//   $cats[] = $row['name'];
+// }
 
 
 mysqli_close($con);
