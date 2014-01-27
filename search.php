@@ -23,9 +23,19 @@ $search_stmt = $con->prepare("SELECT *
                               WHERE description LIKE CONCAT('%',?,'%')
                               AND event_date >= now()
 
+                              -- UNION
+                              -- SELECT E.*
+                              -- FROM Events E, organizer O
+                              -- WHERE E.id = O.event
+
+                              -- UNION 
+                              -- SELECT 
+
                               ORDER BY event_date ASC");
 
 $query = htmlspecialchars($_GET["q"]);
+$query_orgs = htmlspecialchars($_GET["o"]);
+$query_cats = htmlspecialchars($_GET["c"]);
 
 if (!$search_stmt)  {
   echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
