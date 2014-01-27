@@ -19,6 +19,13 @@ if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, $date, $h
   echo "First binding failed: " . $stmt->errno . $stmt->error;
 }
 
+function clean_data($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
 
 function insert_category($cat) {
 	global $con;
@@ -44,11 +51,11 @@ function insert_category($cat) {
 }
 
 
-$title = htmlspecialchars($_POST['title']);
-$desc = htmlspecialchars($_POST['description']);
-$photo_url = htmlspecialchars($_POST['photo_url']);
-$location = htmlspecialchars($_POST['location']);
-$date = htmlspecialchars($_POST['event_date']);
+$title = clean_data($_POST['title']);
+$desc = clean_data($_POST['description']);
+$photo_url = clean_data($_POST['photo_url']);
+$location = clean_data($_POST['location']);
+$date = clean_data($_POST['event_date']);
 $host = "chucknorris"; # change to current user
 $categories = array();
 $categories = $_POST['cats'];
