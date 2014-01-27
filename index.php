@@ -48,6 +48,7 @@ mysqli_close($con);
 <html>
 <?php
 $title = "Midd Events";
+
 include "templates/includes/head.php"
 ?>
 <body>
@@ -95,7 +96,7 @@ include "templates/includes/head.php"
         <div class="col-md-3 col-md-offset-3">
           <select name="o[]" multiple class="form-control">
           <?php foreach ($orgs as $org) { ?>
-            <option><?php echo $org ?></option>
+            <option value="<?php echo $org ?>"><?php echo $org ?></option>
           <?php } ?>
           </select>
         </div>
@@ -103,12 +104,21 @@ include "templates/includes/head.php"
         <div class="col-md-3">
           <select name="c[]" multiple class="form-control">
           <?php foreach ($cats as $cat) { ?>
-            <option><?php echo $cat ?></option>
+            <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
           <?php } ?>
           </select>
         </div>
       </div>
     </div>
+
+    <script>
+    $("select[name='o[]']").select2({
+      placeholder: "Filter by organization..."
+    });
+    $("select[name='c[]']").select2({
+      placeholder: "Filter by category..."
+    });
+    </script>
 
     </form>
 
