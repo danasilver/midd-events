@@ -62,23 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $stmt->close();
 
-        header('Location: ' . '../index.php');
-        die();
-
-
         session_start();
         $_SESSION["username"] = $input_username;
 
-
-
-    ?>
-
-    <script>
-        window.location.href = "/midd-events/index.php"
-    </script>
-
-<?php
-}}
+        header('Location: ' . '../index.php');
+        die();
+    }
+}
 
 mysqli_close($con);
 ?>
