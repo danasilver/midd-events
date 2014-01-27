@@ -234,7 +234,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
-          <textarea id="description" name="description" class="form-control" rows="5" value="<?php echo $desc;?>"></textarea>
+          <textarea id="description" name="description" class="form-control" rows="5"><?php echo $desc;?></textarea>
         </div>
       </div>
     </div>
