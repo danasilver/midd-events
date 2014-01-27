@@ -17,6 +17,13 @@ while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {
   $events_array[] = $row;
 }
 
+//Get all organizations
+$org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
+$orgs = array();
+while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
+  $orgs[] = $row['name'];
+}
+
 // Get all events with photos
 $events_with_photos = array();
 foreach ($events_array as $event) {
@@ -49,23 +56,52 @@ include "templates/includes/head.php"
       <span class="h2">Welcome to Midd Events</span>
     </div>
 
-    <div class="col-lg-4 col-md-4">
-      <form role="form" class="" action="search.php" method="GET">
-        <div class="form-group">
-          <div class="input-group">
-            <input name="q" type="text" class="form-control" id="search" placeholder="Search events" autocomplete="off">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+    <div class="row">
+      <div class="col-lg-4 col-md-4">
+        <form role="form" class="" action="search.php" method="GET">
+          <div class="form-group">
+            <div class="input-group">
+              <input name="q" type="text" class="form-control" id="search" placeholder="Search events" autocomplete="off">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
             </span>
           </div>
         </div>
-      </form>
-    </div>
+      </div>  
 
-    <div class="col-lg-2 col-md-2">
+      <div class="col-lg-2 col-md-2">
       <a href="new.php" class="btn btn-primary">Create an event</a>
     </div>
 
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label class="col-sm-1 col-sm-offset-6 control-label" for="orgs">Organization</label>
+        <div class="col-sm-3">
+          <select name="o[]" multiple class="form-control">
+          <?php foreach ($orgs as $org) { ?>
+            <option><?php echo $org ?></option>
+          <?php } ?>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label class="col-sm-1 col-sm-offset-6 control-label" for="orgs">Categories</label>
+        <div class="col-sm-3">
+          <select name="c[]" multiple class="form-control">
+          <?php foreach ($cats as $cat) { ?>
+            <option><?php echo $cat ?></option>
+          <?php } ?>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    </form>
 
   </div>
 
