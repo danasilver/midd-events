@@ -9,10 +9,10 @@ $con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $input_username = $_POST['username'];
-    $input_fullName = $_POST['fullName'];
-    $input_password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $input_username = htmlspecialchars($_POST['username']);
+    $input_fullName = htmlspecialchars($_POST['fullName']);
+    $input_password = htmlspecialchars($_POST['password']);
+    $confirm_password = htmlspecialchars($_POST['confirm_password']);
     $email = $_POST['email'];
 
     empty($input_username) && $errors["username"] = "This field is required.";
@@ -42,16 +42,35 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $encrypted_txt = crypt($input_password);
 
     date_default_timezone_set('America/New_York');
-    $date = date('Y/m/d h:i:s', time());
+    $date = htmlspecialchars(date('Y/m/d h:i:s', time()));
 
-    $sql = "INSERT INTO Users (username, full_name, is_admin, joined, password, email)
-                VALUES('$input_username','$input_fullName','1','$date','$encrypted_txt','$_POST[email]')";
+        $stmt = $con->prepare("INSERT INTO Users (username, full_name, joined, password, email)
+        VALUES(?, ?, ?, ?, ?)");
+
+        if (!$stmt) {
+            echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        }
+
+        if (!$stmt->bind_param('sssss', $input_username, $input_fullName, $date, $encrypted_txt, $email)) {
+            echo "Binding failed: " . $stmt->errno . $stmt->error;
+        }
+
+
+        if (!$stmt->execute()) {
+            echo "Execute failed: " . $stmt->errno . $stmt->error;
+        }
+
+        $stmt->close();
+
+        header('Location: ' . '../index.php');
+        die();
+
+
+        session_start();
+        $_SESSION["username"] = $input_username;
 
 
 
-    if (!mysqli_query($con, $sql)) {
-        die('Error: ' . mysqli_error($con));
-    }
     ?>
 
     <script>
