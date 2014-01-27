@@ -1,4 +1,5 @@
 <?php
+session_start();
 define('DB_SERVER', 'panther.cs.middlebury.edu');
 define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
@@ -76,6 +77,7 @@ include "templates/includes/head.php"
 ?>
 
 <body>
+<?php include 'templates/includes/navbar.php'; ?>
 <div class="container">
 
     <h2>Results for <a href="search.php?q=<?php echo $query ?>"><?php echo $query ?></a></h2>
@@ -91,8 +93,6 @@ include "templates/includes/head.php"
       ?>       
         
     </p>
-
-    <p><a href="index.php">Back to search</a></p>
 
     <ul class="search-results col-lg-8 col-md-8">
     <?php
@@ -122,5 +122,6 @@ include "templates/includes/head.php"
     </ul>
 
 </div>
-
+<?php include 'templates/includes/scripts.php' ?>
+</body>
 </html>

@@ -52,69 +52,8 @@ $title = "Midd Events";
 include "templates/includes/head.php"
 ?>
 <body>
+<?php include "templates/includes/navbar.php" ?>
 <div class="container">
-  <div class="row index-header">
-    <div class="col-md-3">
-      <span class="h2">Midd Events</span>
-    </div>
-
-    <form role="form" class="" action="search.php" method="GET">
-      <div class="col-md-4 col-md-offset-1">
-        <div class="form-group">
-          <div class="input-group">
-            <input name="q" type="text" class="form-control" id="search" placeholder="Search events" autocomplete="off">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-1">
-      <button id="searchFilterToggle" type="button" data-toggle="button" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span></button>
-      </div>
-
-
-    </form>
-
-    <?php if (array_key_exists("username", $_SESSION)) { ?>
-    <div class="col-md-3">
-      <ul class="list-unstyled list-inline pull-right">
-        <li><a href="new.php" class="btn btn-primary">New Event</a></li>
-        <li><a href="logout.php" class="btn btn-default"><span class="glyphicon glyphicon-off"></span></a></li>
-      </ul>
-    </div>
-    <?php } else { ?>
-    <div class="col-md-3">
-      <ul class="list-unstyled list-inline pull-right">
-        <li><a href="login.php" class="btn btn-default">Login</a></li>
-        <li><a href="newUser.php" class="btn btn-primary">Sign up</a></li>
-      </ul>
-    </div>
-    <?php } ?>
-
-    </div>
-
-    <div id="searchFilter" class="form-group hide">
-      <div class="row">
-        <div class="col-md-3 col-md-offset-3">
-          <select name="o[]" multiple class="form-control" id="searchOrg">
-          <?php foreach ($orgs as $org) { ?>
-            <option value="<?php echo $org ?>"><?php echo $org ?></option>
-          <?php } ?>
-          </select>
-        </div>
-
-        <div class="col-md-3">
-          <select name="c[]" multiple class="form-control" id="searchCat">
-          <?php foreach ($cats as $cat) { ?>
-            <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
-          <?php } ?>
-          </select>
-        </div>
-      </div>
-    </div>
-    </form>
 
   <div id="events-carousel" class="carousel slide hidden-sm hidden-xs">
     <ol class="carousel-indicators">

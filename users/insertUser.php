@@ -29,7 +29,7 @@ if (!$stmt->execute()) {
 
 $stmt->close();
 
-header('Location: ' . 'index.php');
+header('Location: ' . '../index.php');
 die();
 
 $con->close();

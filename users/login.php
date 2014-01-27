@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (crypt($input_password, $fetched_password) == $fetched_password) {
       session_start();
       $_SESSION["username"] = $input_username;
-      header('Location: index.php');
+      header('Location: ../index.php');
       die();
     }
     else {
@@ -46,12 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <html>
 <?php
 $title = "Login";
-include 'templates/includes/head.php';
+$static_prefix = "../";
+include '../templates/includes/head.php';
 ?>
 <body>
+<?php
+$index_prefix = "../";
+$in_users = true;
+include "../templates/includes/navbar.php";
+?>
 <div class="container">
   <h2>Log in</h2>
-  <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
   <form class="form-horizontal col-sm-12 event-form" role="form" method="POST">
 
     <div class="form-group<?php if (array_key_exists("username", $errors)) { echo " has-error"; } ?>">
@@ -70,7 +75,7 @@ include 'templates/includes/head.php';
       <div class="row">
         <label class="col-sm-2 control-label" for="pass">Password</label>
         <div class="col-sm-4">
-          <input type="password" name="password" id="pass" class="form-control" maxlength="64">
+          <input type="password" name="password" id="pass" class="form-control" maxlength="64" tabindex="2">
           <?php if (array_key_exists("password", $errors)) { ?>
           <span class="help-block"><?php echo $errors["password"]; ?></span>
           <?php } ?>
@@ -87,5 +92,6 @@ include 'templates/includes/head.php';
     </div>
   </form>
 </div>
+<?php include '../templates/includes/scripts.php' ?>
 </body>
 </html>

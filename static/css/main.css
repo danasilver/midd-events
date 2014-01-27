@@ -39,9 +39,9 @@
   margin-top: 20px;
 }
 
-.index-header a[href='new.php'] {
+/*.index-header a[href='new.php'] {
   width: 100%;
-}
+}*/
 
 .index-header li:last-child {
   padding-right: 0;
@@ -113,4 +113,17 @@
 .carousel-inner .item .carousel-description h1,
 .carousel-inner .item .carousel-description h2 {
   margin-left: 20px;
+}
+
+/********************
+ * navbar.php
+ ********************/
+
+.navbar-brand-link {
+  color: #333;
+  text-decoration: none;
+}
+.navbar-brand-link:hover {
+  color: #333;
+  text-decoration: none;
 }

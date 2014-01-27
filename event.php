@@ -1,4 +1,5 @@
 <?php
+session_start();
 define ('DB_SERVER', 'panther.cs.middlebury.edu');
 define ('DB_USERNAME', 'dsilver');
 define ('DB_PASSWORD', 'dsilver122193');
@@ -32,12 +33,11 @@ include "templates/includes/head.php";
 ?>
 
 <body>
-
+<?php include 'templates/includes/navbar.php' ?>
 <div class="container">
   <h2><?php echo $event['title'] ?></h2>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location'] ?></h4>
-  <a href="index.php" class="return-home">Back to search</a>
   <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-4">
       <img width="100%" height="100%" src="<?php echo $event['photo_url'] ?>">
@@ -67,4 +67,5 @@ include "templates/includes/head.php";
 ?>
 
 </body>
+<?php include 'templates/includes/scripts.php' ?>
 </html>

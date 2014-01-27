@@ -1,4 +1,5 @@
 <?php
+session_start();
 define('DB_SERVER', 'panther.cs.middlebury.edu');
 define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
@@ -156,6 +157,7 @@ $title = "New Event";
 include "templates/includes/head.php"
 ?>
 <body>
+<?php include "templates/includes/navbar.php" ?>
 <div class="container">
   <h2>Create a new event</h2>
   <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
@@ -248,6 +250,6 @@ include "templates/includes/head.php"
     </div>
   </form>
 </div>
-
+<?php include 'templates/includes/scripts.php' ?>
 </body>
 </html>
