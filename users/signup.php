@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $confirm_password = htmlspecialchars($_POST['confirm_password']);
     $email = $_POST['email'];
 
+
     empty($input_username) && $errors["username"] = "This field is required.";
     empty($input_fullName) && $errors["fullName"] = "This field is required.";
     empty($input_password) && $errors["password"] = "This field is required.";
@@ -44,8 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     date_default_timezone_set('America/New_York');
     $date = htmlspecialchars(date('Y/m/d h:i:s', time()));
 
+
         $stmt = $con->prepare("INSERT INTO Users (username, full_name, joined, password, email)
         VALUES(?, ?, ?, ?, ?)");
+
 
         if (!$stmt) {
             echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
@@ -54,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (!$stmt->bind_param('sssss', $input_username, $input_fullName, $date, $encrypted_txt, $email)) {
             echo "Binding failed: " . $stmt->errno . $stmt->error;
         }
+
 
 
         if (!$stmt->execute()) {
@@ -147,20 +151,22 @@ include "../templates/includes/navbar.php";
       </div>
 
     <!-- Email -->
-    <div class="form-group<?php if (array_key_exists("email", $errors)) { echo " has-error"; } ?>">
-      <div class="row">
-        <label class="col-sm-2 control-label" for="email">Email</label>
-        <div class="col-sm-4">
-          <div class="input-group">
-            <input type="text" name="email" id="email" class="form-control" maxlength="45" tabindex="4" autocomplete="off">
-            <span class="input-group-addon">@middlebury.edu</span>
+
+      <div class="form-group<?php if (array_key_exists("email", $errors)) { echo " has-error"; } ?>">
+          <div class="row">
+              <label class="col-sm-2 control-label" for="email">Email</label>
+              <div class="col-sm-4">
+                  <div class="input-group">
+                    <input type="text" name="email" id="email" class="form-control" maxlength="20" tabindex="2" >
+                    <span class="input-group-addon">@middlebury.edu</span>
+                  </div>
+                    <value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>">
+                  <?php if (array_key_exists("email", $errors)) { ?>
+                      <span class="help-block"><?php echo $errors["email"]; ?></span>
+                  <?php } ?>
+              </div>
           </div>
-            <?php if (array_key_exists("email", $errors)) { ?>
-                <span class="help-block"><?php echo $errors["email"]; ?></span>
-            <?php } ?>
-        </div>
       </div>
-    </div>
 
     <div class="form-group">
       <div class="row">
