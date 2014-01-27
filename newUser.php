@@ -41,8 +41,6 @@ include "templates/includes/head.php"
       </div>
     </div>
 
-    <!-- must secure the password-->
-
     <!-- Password -->
     <div class="form-group">
       <div class="row">
