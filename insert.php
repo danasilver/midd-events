@@ -36,15 +36,15 @@ function insert_category($cat) {
 	(?, ?)");
 
 	if (!$stmt2) {
-	echo "Second prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+		echo "Second prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
 	}
 
 	if (!$stmt2->bind_param('is', $eventid, $cat)) {
-	echo "Second binding failed: " . $stmt2->errno . $stmt2->error;
+		echo "Second binding failed: " . $stmt2->errno . $stmt2->error;
 	}
 
 	if (!$stmt2->execute()) {
-  	echo "Execute failed: " . $stmt2->errno . $stmt2->error;
+  		echo "Execute failed: " . $stmt2->errno . $stmt2->error;
 	}
 
 	$stmt2->close();
@@ -59,11 +59,10 @@ $date = clean_data($_POST['event_date']);
 $host = "chucknorris"; # change to current user
 $categories = array();
 $categories = $_POST['cats'];
+$org = htmlspecialchars($_POST['orgs']);
 
-// if (isset($_POST["cats"])) 
-// {
-//     print_r($_POST["cats"]); 
-// }
+
+
 
 if (!$stmt->execute()) {
   echo "Execute failed: " . $stmt->errno . $stmt->error;
@@ -71,9 +70,28 @@ if (!$stmt->execute()) {
 $eventid = $con->insert_id;
 $stmt->close();
 
+$stmt3 = $con->prepare("INSERT INTO organizer (org, event)
+VALUES
+(?, ?)");
+
+if (!$stmt3)  {
+  	echo "Third prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+if (!$stmt3->bind_param('si', $org, $eventid)) {
+	echo "Third binding failed: " . $stmt3->errno . $stmt3->error;
+}
+if (!$stmt3->execute()) {
+  	echo "Execute failed: " . $stmt3->errno . $stmt3->error;
+	}
+
+$stmt3->close();
+
 foreach ($categories as $category) {
 	insert_category($category);
 }
+
+
+
 
 
 header('Location: ' . 'event.php?event=' . $eventid);

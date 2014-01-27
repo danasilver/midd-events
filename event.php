@@ -15,6 +15,9 @@ ORDER BY category");
 $cats = array();
 while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['category'];
+
+$event_result = mysqli_query($con, "SELECT org FROM organizer WHERE event = $event_id");
+$org = mysqli_fetch_array($event_result);
 }
 mysqli_close($con);
 
@@ -43,6 +46,7 @@ include "templates/includes/head.php";
       <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
       <h4 class="hidden-xs"><?php echo $event['location'] ?></h4>
       <h4>Created by: <?php echo $event['host'] ?></h4>
+      <h4>Organized by: <?php echo $org['org'] ?></h4>
       <p><?php echo $event['description'] ?></p>
       <h4>Categories</h4>
       <ul>
