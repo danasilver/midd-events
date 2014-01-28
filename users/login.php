@@ -35,23 +35,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
       echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
     }
     else {
-      bind_array($stmt, $row);
+      bind_array($stmt, $results);
       $stmt->fetch();
-      print_r($row);
     }
 
     $stmt->close();
     $con->close();
 
-    // if (crypt($input_password, $fetched_password) == $fetched_password) {
-    //   session_start();
-    //   $_SESSION["username"] = $input_username;
-    //   header('Location: ../index.php');
-    //   die();
-    // }
-    // else {
-    //   $errors["password"] = "The password you entered didn't match your username.";
-    // }
+    if (crypt($input_password, $results["password"]) == $results["password"]) {
+      session_start();
+      $_SESSION["username"] = $input_username;
+      header('Location: ../index.php');
+      die();
+    }
+    else {
+      $errors["password"] = "The password you entered didn't match your username.";
+    }
   }
 }
 
