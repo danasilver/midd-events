@@ -4,6 +4,15 @@ define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
 define('DB_DATABASE', 'dsilver_EventsCalendar');
 
+function bind_array($stmt, &$row) {
+  $md = $stmt->result_metadata();
+  $params = array();
+  while($field = $md->fetch_field()) {
+        $params[] = &$row[$field->name];
+  }
+  call_user_func_array(array($stmt, 'bind_result'), $params);
+}
+
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -13,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   empty($input_username) && $errors["username"] = "This field is required.";
   empty($input_password) && $errors["password"] = "This field is required.";
 
-  if (!$errors) {
+  if (empty($errors)) {
     $con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
     $stmt = $con->prepare("SELECT password
@@ -21,14 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                            WHERE username = (?)");
 
     $stmt->bind_param('s', $input_username);
-    $stmt->execute();
-
-    $fetched_password = mysqli_fetch_array($stmt->get_result())['password'];
+    
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+    else {
+      bind_array($stmt, $results);
+      $stmt->fetch();
+    }
 
     $stmt->close();
     $con->close();
 
-    if (crypt($input_password, $fetched_password) == $fetched_password) {
+    if (crypt($input_password, $results["password"]) == $results["password"]) {
       session_start();
       $_SESSION["username"] = $input_username;
       header('Location: ../index.php');
