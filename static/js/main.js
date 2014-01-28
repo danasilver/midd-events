@@ -15,3 +15,9 @@ $("#events-carousel").carousel({
 $("#searchFilterToggle").on('click', function () {
   $("#searchFilter").toggleClass("hide");
 });
+
+$("#navSearchStartDate, #navSearchEndDate").datetimepicker({
+  language: 'en',
+  pick12HourFormat: true,
+  pickSeconds: false
+})
