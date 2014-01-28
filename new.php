@@ -222,11 +222,16 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Date -->
-    <div class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
+    <div id="newEventDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="date">Date</label>
         <div class="col-sm-4">
-          <input type="date" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+          <div class="input-group">
+            <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
