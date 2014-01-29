@@ -7,39 +7,98 @@ define('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
-$search_stmt = $con->prepare("SELECT * 
-                              FROM Events
-                              WHERE title LIKE CONCAT('%',?,'%')
-                              AND event_date >= now()
+$search_cats = $search_orgs = array();
+$start_date = $end_date = "";
+if (isset($_GET["c"])) {
+  $search_cats = $_GET["c"];
+}
+if (isset($_GET["o"])) {
+  $search_orgs = $_GET["o"];
+}
 
-                              UNION
-                              SELECT *
-                              FROM Events
-                              WHERE location LIKE CONCAT('%',?,'%')
-                              AND event_date >= now()
+if (isset($_GET["start"])) {
+  $start_date = $_GET["start"];
+}
 
-                              UNION
-                              SELECT *
-                              FROM Events
-                              WHERE description LIKE CONCAT('%',?,'%')
-                              AND event_date >= now()
+if (isset($_GET["end"])) {
+  $end_date = $_GET["end"];
+}
 
-                              -- UNION
-                              -- SELECT E.*
-                              -- FROM Events E, organizer O
-                              -- WHERE E.id = O.event
+$sql_query = "SELECT E.* 
+          FROM Events E, categorized_in C, organizer O
+          WHERE E.title LIKE CONCAT('%',?,'%')
+          [cats]
+          [orgs]
+          [start]
+          [end]
 
-                              -- UNION 
-                              -- SELECT 
+          UNION
+          SELECT E.*
+          FROM Events E, categorized_in C, organizer O
+          WHERE E.location LIKE CONCAT('%',?,'%')
+          [cats]
+          [orgs]
+          [start]
+          [end]
 
-                              ORDER BY event_date ASC");
+          UNION
+          SELECT E.*
+          FROM Events E, categorized_in C, organizer O
+          WHERE E.description LIKE CONCAT('%',?,'%')
+          [cats]
+          [orgs]
+          [start]
+          [end]
+
+          ORDER BY event_date ASC";
+
+if (!empty($search_cats)) {
+  $search_cats_str = "AND C.event = E.id AND C.category IN ('" . implode("','", $search_cats) . "')";
+  $sql_query = str_replace("[cats]", $search_cats_str, $sql_query);
+}
+else {
+  $sql_query = str_replace("[cats]", "", $sql_query);
+}
+
+if (!empty($search_orgs)) {
+  $sql_query = str_replace("[orgs]", 
+              "AND O.event = E.id AND O.org IN ('" . implode("','", $search_orgs) . "')",
+              $sql_query);
+}
+else {
+  $sql_query = str_replace("[orgs]", "", $sql_query);
+}
+
+if (!empty($start_date)) {
+  $start_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $start_date)));
+  $sql_query = str_replace("[start]", 
+              "AND event_date >= " . $start_date_sql, 
+              $sql_query);
+}
+else {
+  $sql_query = str_replace("[start]", "", $sql_query);
+}
+
+if (!empty($end_date)) {
+  $end_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $end_date)));
+  $sql_query = str_replace("[end]", 
+              "AND end_date <= " . $end_date_sql, 
+              $sql_query);
+}
+else {
+  $sql_query = str_replace("[end]", 
+              "AND end_date >= NOW()", 
+              $sql_query);
+}
+
+echo $sql_query;
+
+$search_stmt = $con->prepare($sql_query);
 
 $query = htmlspecialchars($_GET["q"]);
-$query_orgs = htmlspecialchars($_GET["o"]);
-$query_cats = htmlspecialchars($_GET["c"]);
 
 if (!$search_stmt)  {
-  echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  echo "Prepare failed: (" . $con->errno . ") " . $con->error;
 }
 
 if (!$search_stmt->bind_param('sss', $query, $query, $query)) {

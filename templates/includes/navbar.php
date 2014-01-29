@@ -81,7 +81,7 @@ if (!isset($in_users)) {
 
               <div id="navSearchStartDate" class="form-group col-md-2 col-md-offset-1">
                 <div class="input-group date">
-                  <input class="form-control" data-format="MM/dd/yyyy" type="text" placeholder="Start date">
+                  <input name="start" class="form-control" data-format="MM/dd/yyyy" type="text" placeholder="Start date">
                   <span class="input-group-btn">
                     <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
                   </span>
@@ -90,7 +90,7 @@ if (!isset($in_users)) {
 
               <div id="navSearchEndDate" class="form-group col-md-2">
                 <div class="input-group date">
-                  <input class="form-control" data-format="MM/dd/yyyy" type="text" placeholder="End date">
+                  <input name="end" class="form-control" data-format="MM/dd/yyyy" type="text" placeholder="End date">
                   <span class="input-group-btn">
                     <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
                   </span>
