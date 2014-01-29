@@ -29,8 +29,7 @@ $sql_query = "SELECT E.*
           WHERE E.title LIKE CONCAT('%',?,'%')
           [cats]
           [orgs]
-          [start]
-          [end]
+          [dates]
 
           UNION
           SELECT E.*
@@ -38,8 +37,7 @@ $sql_query = "SELECT E.*
           WHERE E.location LIKE CONCAT('%',?,'%')
           [cats]
           [orgs]
-          [start]
-          [end]
+          [dates]
 
           UNION
           SELECT E.*
@@ -47,8 +45,7 @@ $sql_query = "SELECT E.*
           WHERE E.description LIKE CONCAT('%',?,'%')
           [cats]
           [orgs]
-          [start]
-          [end]
+          [dates]
 
           ORDER BY event_date ASC";
 
@@ -69,29 +66,30 @@ else {
   $sql_query = str_replace("[orgs]", "", $sql_query);
 }
 
-if (!empty($start_date)) {
+if (!empty($start_date) && !empty($end_date)) {
   $start_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $start_date)));
-  $sql_query = str_replace("[start]", 
+  $end_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $end_date)));
+  $sql_query = str_replace("[dates]", 
+              "AND event_date >= " . $start_date_sql . " AND end_date <= " . $end_date_sql, 
+              $sql_query);
+}
+else if (!empty($start_date)) {
+  $start_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $start_date)));
+  $sql_query = str_replace("[dates]", 
               "AND event_date >= " . $start_date_sql, 
               $sql_query);
 }
-else {
-  $sql_query = str_replace("[start]", "", $sql_query);
-}
-
-if (!empty($end_date)) {
+else if (!empty($end_date)) {
   $end_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $end_date)));
-  $sql_query = str_replace("[end]", 
+  $sql_query = str_replace("[dates]", 
               "AND end_date <= " . $end_date_sql, 
               $sql_query);
 }
 else {
-  $sql_query = str_replace("[end]", 
+  $sql_query = str_replace("[dates]", 
               "AND end_date >= NOW()", 
               $sql_query);
 }
-
-echo $sql_query;
 
 $search_stmt = $con->prepare($sql_query);
 
@@ -161,7 +159,7 @@ include "templates/includes/head.php"
       <h3><a href="event.php?event=<?php echo $event['id'] ?>"><?php echo $event['title'] ?></a></h3>
         <div class="item-detail">
           <p>
-            <div><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])) ?></div>
+            <div><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])) . " to " . date('F j, Y \a\t g:i a', strtotime($event['end_date'])) ?></div>
             <div><?php echo $event['location']; ?></div>
           </p>
           <p>
