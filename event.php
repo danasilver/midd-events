@@ -8,28 +8,35 @@ define ('DB_DATABASE', 'dsilver_EventsCalendar');
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
 $event_id = htmlspecialchars($_GET["event"]);
-$attending=FALSE;
-$loggedIn=FALSE;
 
-if (isset($_SESSION["username"])){
-    $loggedIn=TRUE;
+// If attend/unattend post request
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+  $uname = $_SESSION["username"];
+  $rsvp_action = $_POST["rsvp_action"];
 
-    $user_session=$_SESSION["username"];
-    $count_Attending= mysqli_query($con, "SELECT COUNT(*) FROM attend WHERE event = '$event_id' AND user = '$user_session' ");
-    $result_array=mysqli_fetch_array($count_Attending);
-    $is_attending=$result_array[0];
-    if($is_attending==1){
-        $attending=TRUE;
-    }
-
-
+  if ($rsvp_action == "attend") {
+    mysqli_query($con, "INSERT INTO attend (user, event) VALUES ('$uname', $event_id)");
+  }
+  else if ($rsvp_action == "unattend") {
+    mysqli_query($con, "DELETE FROM attend WHERE user = '$uname' AND event = '$event_id' LIMIT 1");
+  }
 }
 
+$attend_count_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $event_id");
+$attend_count = mysqli_fetch_array($attend_count_query)[0];
+
+$user_attending = false;
+if (isset($_SESSION["username"])) {
+  $uname = $_SESSION['username'];
+  $user_attending_query = mysqli_query($con, "SELECT user FROM attend WHERE event = '$event_id' AND user = '$uname'");
+  $user_attending_result = mysqli_fetch_array($user_attending_query);
+  if (!empty($user_attending_result)) {
+    $user_attending = true;
+  }
+}
 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
 $event = mysqli_fetch_array($result);
-
-
 
 $cat_results = mysqli_query($con, "SELECT category FROM categorized_in WHERE event = $event_id
 ORDER BY category");
@@ -89,28 +96,39 @@ include "templates/includes/head.php";
 <body>
 <?php include 'templates/includes/navbar.php' ?>
 <div class="container">
+  <form method="POST">
   <h2>
     <?php echo $event['title'] ?>
-    <button type="button" id="attend" class="btn btn-primary btn-default" onclick="attend()">Click to Attend</button>
-    <button type="button" id="unattend" class="btn btn-primary btn-default hidden" onclick="unattend()">Click to Unattend</button>
+    <?php if (isset($_SESSION["username"])) { ?>
+      <?php if (!$user_attending) { ?>
+        <input type="hidden" name="rsvp_action" value="attend">
+        <button type="submit" class="btn btn-primary pull-right">Click to Attend</button>
+      <?php } else { ?>
+        <input type="hidden" name="rsvp_action" value="unattend">
+        <button type="submit" class="btn btn-default pull-right">Click to Unattend</button>
+      <?php } ?>
+    <?php } else { ?>
+      <a class="btn btn-default pull-right" href="users/login.php">Login to RSVP</a>
+    <?php } ?>
   </h2>
-  <h4 class="hidden-lg hidden-md hidden-sm"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
-  <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location']; ?></h4></h4>
+  </form>
+  <h4 class="hidden-lg hidden-md hidden-sm">Starts <?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
+  <h4 class="hidden-lg hidden-md hidden-sm">Ends <?php echo $event['location']; ?></h4></h4>
   <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-4">
       <img width="100%" height="100%" src="<?php echo $event['photo_url'] ?>">
     </div>
     <div class="col-lg-8 col-md-8 col-sm-8">
-      <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
-      <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['end_date'])); ?></h4>
+      <h4 class="hidden-xs">Starts <?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
+      <h4 class="hidden-xs">Ends <?php echo date('F j, Y \a\t g:i a', strtotime($event['end_date'])); ?></h4>
       <h4 class="hidden-xs"><?php echo $event['location'] ?></h4>
+      <h4><?php echo $attend_count; ?> attendees</h4>
       <h4>Created by: <?php echo $event['host'] ?></h4>
       <h4>Organized by: <?php echo $e_org['org'] ?></h4>
       <p><?php echo $event['description'] ?></p>
 
       <h4><?php if (!empty($cates)) { echo "Categories"; } ?></h4>
-      <ul>
-
+      <ul class="list-unstyled list-inline">
       <?php foreach ($cates as $cat) { ?>
       <li>
         <a href="search.php?q=<?php echo $cat ?>">
@@ -151,27 +169,6 @@ include "templates/includes/head.php";
 ?>
 </div>
 </div>
-
-<!-- scripts -->
-<script type="text/javascript">
-  function attend(){
-    $('#attend').addClass('hidden');
-    $('#unattend').removeClass('hidden');
-    <?php 
-          mysqli_query($con,"INSERT INTO attend (user, event) VALUES ($user_session, $event_id)");
-    ?>
-  }
-  function unattend(){
-    $('#unattend').addClass('hidden');
-    $('#attend').removeClass('hidden');
-    <?php 
-      if($loggedIn) {
-        mysqli_query($con,"DELETE FROM attend
-         WHERE user = $user_session AND event = $event_id");
-      }
-    ?>
-  }
-</script>
 
 </body>
 <?php include 'templates/includes/scripts.php' ?>
