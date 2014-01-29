@@ -57,22 +57,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   empty($date) && $errors["date"] = "This field is required.";
   empty($org) && $errors["org"] = "This field is required.";
   empty($categories) && $errors["categories"] = "This field is required.";
+  empty($end_date) && $errors["end_date"] = "This field is required.";
 
   if (empty($errors)) {
     // Insert event
     $event_stmt = $con->prepare("INSERT INTO Events 
                                  (title, description, photo_url, location, event_date, end_date, host)
                                  VALUES
-                                 (?, ?, ?, ?, ?, NOW(), ?)");
+                                 (?, ?, ?, ?, ?, ?, ?)");
 
     if (!$event_stmt)  {
       echo "Event insert prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
-    if (!$event_stmt->bind_param('ssssss', $event_title, 
+    if (!$event_stmt->bind_param('sssssss', $event_title, 
                                            $desc, 
                                            $photo_url, 
                                            $location, 
-                                           date("Y-m-d H:i:s", strtotime($date)), 
+                                           date("Y-m-d H:i:s", strtotime($date)),
+                                           date("Y-m-d H:i:s", strtotime($end_date)), 
                                            $host))
     {
       echo "Event insert binding failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -201,7 +203,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- End Date -->
-    <div id="newEventEndDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
+    <div id="newEventEndDate" class="form-group<?php if (array_key_exists("date", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="end_date">End Date</label>
         <div class="col-sm-4">
