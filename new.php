@@ -7,21 +7,22 @@ define('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
+// Get organizations and categories for form
 $org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
 $orgs = array();
 while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
   $orgs[] = $row['name'];
 }
 
-
 $cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
 $cats = array();
 while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['name'];
 }
+
+// POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  function clean_data($data)
-  {
+  function clean_data($data) {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
@@ -90,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, $date, $host)) {
+    if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, date("Y-m-d H:i:s", strtotime($date)), $host)) {
       echo "First binding failed: " . $stmt->errno . $stmt->error;
     }
 
@@ -117,7 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt2->close();
     }
 
-    $host = "chucknorris"; # change to current user
+    $host = $_SESSION["username"];
+    $categories = array();
+    $categories = $_POST['cats'];
 
     if (!$stmt->execute()) {
       echo "Execute failed: " . $stmt->errno . $stmt->error;
@@ -125,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $eventid = $con->insert_id;
     $stmt->close();
 
+    $org = htmlspecialchars($_POST["org"]);
     $stmt3 = $con->prepare("INSERT INTO organizer (org, event)
     VALUES
     (?, ?)");
@@ -192,9 +196,9 @@ include "templates/includes/head.php"
     <!-- Organization -->
     <div class="form-group">
       <div class="row">
-        <label class="col-sm-2 control-label" for="orgs">Organization</label>
+        <label class="col-sm-2 control-label" for="org">Organization</label>
         <div class="col-sm-4">
-          <select id="newEventOrg" name="orgs" class="form-control">
+          <select id="newEventOrg" name="org">
           <?php foreach ($orgs as $org) { ?>
             <option><?php echo $org ?></option>
           <?php } ?>
@@ -207,14 +211,13 @@ include "templates/includes/head.php"
     <div class="form-group form-group-category <?php if ($errorMessage) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="cats">Categories</label>
-        <div class="col-sm-4" data-toggle="buttons">
+        <div class="col-sm-4">
+          <select id="newEventCats" name="cats[]" multiple>
           <?php foreach ($cats as $cat) { ?>
-            <label for="cats" class="btn btn-default btn-category">
-              <input name="cats[]" type="checkbox" id="cats" value="<?php echo $cat ?>">
-              <?php echo $cat ?>
-            </label>
+            <option><?php echo $cat ?></option>
           <?php } ?>
           <span class="help-block"><?php echo $errorMessage;?></span>
+          </select>
         </div>
       </div>
     </div>

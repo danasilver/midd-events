@@ -36,8 +36,8 @@ $(document).ready(function() {
 
   // Select 2
 
-  $("#newEventOrg").select2({
-    placeholder: "Select an organization"
+  $("#newEventOrg, #newEventCats").select2({
+    placeholder: "Select all that apply"
   });
 
   // Image preview
@@ -65,7 +65,7 @@ $(document).ready(function() {
       .css("padding-top", "23px");
   }
 
-  document.querySelector("#newEventImgPreview img").onerror = alertImgError;
+  previewImgWrapper.find("img").on("error", alertImgError);
   imgInput.on("change", updateImage);
 
   // Initialize for POST requests

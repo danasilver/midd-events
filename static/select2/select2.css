@@ -11,6 +11,7 @@ Version: 3.4.2 Timestamp: Mon Aug 12 15:04:12 PDT 2013
     vertical-align: middle;
     padding: 0;
     border: none;
+    width: 100%;
 }
 
 .select2-container,
