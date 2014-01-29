@@ -2,10 +2,10 @@ $(document).ready(function() {
 
   // Select 2
 
-  $("#searchCat").select2({
+  $(".searchCat").select2({
     placeholder: "Filter by category..."
   });
-  $("#searchOrg").select2({
+  $(".searchOrg").select2({
     placeholder: "Filter by organization..."
   });
 

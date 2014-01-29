@@ -73,6 +73,12 @@
   margin: 10px;
 }
 
+@media (min-width: 992px) {
+  #navSearchStartDate.refine {
+    margin-top: 63px;
+  }
+}
+
 /********************
  * index.php
  ********************/

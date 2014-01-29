@@ -98,7 +98,7 @@ if (!isset($in_users)) {
               </div>
 
               <div class="form-group col-md-3">
-                <select name="o[]" multiple class="form-control" id="searchOrg">
+                <select name="o[]" multiple class="form-control searchOrg">
                 <?php foreach ($orgs as $org) { ?>
                   <option value="<?php echo $org ?>"><?php echo $org ?></option>
                 <?php } ?>
@@ -106,7 +106,7 @@ if (!isset($in_users)) {
               </div>
 
               <div class="form-group col-md-3">
-                <select name="c[]" multiple class="form-control" id="searchCat">
+                <select name="c[]" multiple class="form-control searchCat">
                 <?php foreach ($cats as $cat) { ?>
                   <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
                 <?php } ?>
