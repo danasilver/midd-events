@@ -27,8 +27,9 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['name'];
 }
 
-$errors = array();
+$errors = $categories = array();
 $org_placeholder = "Active Minds";
+$event_title = $desc = $photo_url = $location = $date = $end_date = "";
 
 // POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -47,11 +48,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $end_date = clean_data($_POST['end_date']);
   $org = $org_placeholder = clean_data($_POST["org"]);
   $categories = array();
-  $categories = $_POST['cats'];
+  if (!empty($_POST['cats'])){
+    $categories = $_POST['cats'];
+  }
 
   $host = $_SESSION["username"];
 
-  empty($event_title) && $errors["title"] = "This field is required.";
+  empty($event_title) && $errors["event_title"] = "This field is required.";
   empty($desc) && $errors["desc"] = "This field is required.";
   empty($photo_url) && $errors["photo_url"] = "This field is required.";
   empty($location) && $errors["location"] = "This field is required.";
@@ -141,11 +144,11 @@ include "templates/includes/head.php"
   <h2>Create a new event</h2>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
     <!-- Title -->
-    <div class="form-group<?php if (array_key_exists("title", $errors)) { echo " has-error"; } ?>">
+    <div class="form-group<?php if (array_key_exists("event_title", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="title" id="title" maxlength="30" value="">
+          <input type="text" class="form-control" name="title" id="title" maxlength="30" value="<?php echo $event_title;?>">
         </div>
       </div>
     </div>
@@ -155,7 +158,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
-          <input type="text" name="location" id="location" class="form-control" maxlength="100" value="">
+          <input type="text" name="location" id="location" class="form-control" maxlength="100" value="<?php echo $location;?>">
         </div>
       </div>
     </div>
@@ -181,7 +184,7 @@ include "templates/includes/head.php"
         <div class="col-sm-4">
           <select id="newEventCats" name="cats[]" multiple>
           <?php foreach ($cats as $cat) { ?>
-            <option><?php echo $cat ?></option>
+            <option <?php if (in_array($cat, $categories)) { echo "selected"; } ?>><?php echo $cat ?></option>
           <?php } ?>
           </select>
         </div>
@@ -223,7 +226,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
-          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="" autocomplete="off">
+          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="<?php echo $photo_url;?>" autocomplete="off">
         </div>
       </div>
     </div>
@@ -244,7 +247,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
-          <textarea id="description" name="description" class="form-control" rows="5"></textarea>
+          <textarea id="description" name="description" class="form-control" rows="5"><?php echo $desc;?></textarea>
         </div>
       </div>
     </div>
