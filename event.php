@@ -79,6 +79,7 @@ include "templates/includes/head.php";
     </div>
     <div class="col-lg-8 col-md-8 col-sm-8">
       <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
+      <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['end_date'])); ?></h4>
       <h4 class="hidden-xs"><?php echo $event['location'] ?></h4>
       <h4>Created by: <?php echo $event['host'] ?></h4>
       <h4>Organized by: <?php echo $e_org['org'] ?></h4>
