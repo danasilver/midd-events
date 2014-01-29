@@ -23,9 +23,52 @@ $(document).ready(function() {
     pickTime: false
   });
 
+  /*****************
+   *  New event page
+   *****************/
+
+  // Datepicker
   var newEventPicker = $("#newEventDate").datetimepicker({
     language: 'en',
     pick12HourFormat: true,
     pickSeconds:false
   });
+
+  // Select 2
+
+  $("#newEventOrg").select2({
+    placeholder: "Select an organization"
+  });
+
+  // Image preview
+  var imgInput = $("#newEventImg input"),
+      previewImgWrapper = $("#newEventImgPreview"),
+      urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+  function updateImage() {
+    if (urlRegex.test(imgInput.val())) {
+      previewImgWrapper.find("div")
+        .text("")
+        .css("padding-top", "0");
+      previewImgWrapper.find("img").attr("src", imgInput.val());
+    }
+    else if (imgInput.val() !== "") {
+      alertImgError();
+    }
+    // else do nothing
+  }
+
+  function alertImgError() {
+    previewImgWrapper.find("img").attr("src", "");
+    previewImgWrapper.find("div")
+      .text("Oops, looks like that's not an image.")
+      .css("padding-top", "23px");
+  }
+
+  document.querySelector("#newEventImgPreview img").onerror = alertImgError;
+  imgInput.on("change", updateImage);
+
+  // Initialize for POST requests
+  updateImage();
+
 });

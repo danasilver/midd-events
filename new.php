@@ -187,7 +187,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="orgs">Organization</label>
         <div class="col-sm-4">
-          <select name="orgs" class="form-control">
+          <select id="newEventOrg" name="orgs" class="form-control">
           <?php foreach ($orgs as $org) { ?>
             <option><?php echo $org ?></option>
           <?php } ?>
@@ -211,16 +211,6 @@ include "templates/includes/head.php"
       </div>
     </div>
 
-    <!-- Photo URL -->
-    <div class="form-group<?php if ($photo_urlErr) { echo " has-error"; } ?>">
-      <div class="row">
-        <label class="col-sm-2 control-label" for="photo">Photo URL</label>
-        <div class="col-sm-4">
-          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="100" value="<?php echo $photo_url;?>">
-        </div>
-      </div>
-    </div>
-
     <!-- Date -->
     <div id="newEventDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
       <div class="row">
@@ -231,6 +221,27 @@ include "templates/includes/head.php"
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo URL -->
+    <div id="newEventImg" class="form-group<?php if ($photo_urlErr) { echo " has-error"; } ?>">
+      <div class="row">
+        <label class="col-sm-2 control-label" for="photo">Photo URL</label>
+        <div class="col-sm-4">
+          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="<?php echo $photo_url;?>" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" >
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-2">
+          <div id="newEventImgPreview">
+            <div>Photo Preview</div>
+            <img src="">
           </div>
         </div>
       </div>
