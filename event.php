@@ -5,10 +5,9 @@ define ('DB_USERNAME', 'dsilver');
 define ('DB_PASSWORD', 'dsilver122193');
 define ('DB_DATABASE', 'dsilver_EventsCalendar');
 
-$event_id = htmlspecialchars($_GET["event"]);
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
-
+$event_id = htmlspecialchars($_GET["event"]);
 $attending=FALSE;
 $loggedIn=FALSE;
 
@@ -29,8 +28,6 @@ if (isset($_SESSION["username"])){
 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
 $event = mysqli_fetch_array($result);
-
-
 
 
 
@@ -78,8 +75,6 @@ foreach ($related_events as $revent) {
 }
 $related_with_photos = array_slice($related_with_photos, 0, 5);
 
-mysqli_close($con);
-
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +89,11 @@ include "templates/includes/head.php";
 <body>
 <?php include 'templates/includes/navbar.php' ?>
 <div class="container">
-  <h2><?php echo $event['title'] ?></h2>
+  <h2>
+    <?php echo $event['title'] ?>
+    <button type="button" id="attend" class="btn btn-primary btn-default" onclick="attend()">Click to Attend</button>
+    <button type="button" id="unattend" class="btn btn-primary btn-default hidden" onclick="unattend()">Click to Unattend</button>
+  </h2>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location']; ?></h4></h4>
   <div class="row">
@@ -109,11 +108,7 @@ include "templates/includes/head.php";
       <h4>Organized by: <?php echo $e_org['org'] ?></h4>
       <p><?php echo $event['description'] ?></p>
 
-
-
-
-
-      <h4>Categories</h4>
+      <h4><?php if (!empty($cates)) { echo "Categories"; } ?></h4>
       <ul>
 
       <?php foreach ($cates as $cat) { ?>
@@ -124,59 +119,11 @@ include "templates/includes/head.php";
       </li>
       <?php } ?>
       </ul>
-
-        <?php
-        if($loggedIn){
-            if(!$attending){
-                ?>
-
-                <div class="btn-default" data-toggle="buttons">
-
-                    <button type="button" id="attend" class="btn btn-primary btn-default" >Click to Attend</button>
-                    <script type="text/javascript">
-                        $('#attend').onclick( function (e) {
-                            <?php
-                            mysqli_query($con,"INSERT INTO  `dsilver_EventsCalendar`.`attend` (`user` , `event`)
-                            VALUES ('$user_session',  '$event_id')");
-                            ?>
-
-                        })
-                    </script>
-                </div>
-            <?php
-            }
-            if($attending){
-                ?>
-                <div class="btn-default" data-toggle="buttons">
-                    <button type="button" id="unattend" class="btn btn-primary btn-default" >Click to UnAttend</button>
-                    <script type="text/javascript">
-                        $('#unattend').onclick( function (e) {
-                            <?php
-                            mysqli_query($con,"DELETE FROM `dsilver_EventsCalendar`.`attend` WHERE `attend`.`user` = '$user_session' AND `attend`.`event` = '$event_id')");
-                            ?>
-
-                        })
-                    </script>
-                </div>
-            <?php
-            }
-
-        }
-        ?>
-
     </div>
-
   </div>
 
-
-
-
-
-
-
   <!-- Thumbnails for related events -->
-
-  <h3>Related Events</h3>
+  <h3><?php if (!empty($related_with_photos)) { echo "Related Events"; } ?></h3>
 
   <div class="row">
     <?php foreach ($related_with_photos as $thumbnail) { ?>
@@ -205,8 +152,30 @@ include "templates/includes/head.php";
 </div>
 </div>
 
-
+<!-- scripts -->
+<script type="text/javascript">
+  function attend(){
+    $('#attend').addClass('hidden');
+    $('#unattend').removeClass('hidden');
+    // <?php 
+    //       mysqli_query($con,"INSERT INTO attend (user, event) VALUES ($user_session, $event_id)");
+    // ?>
+  }
+  function unattend(){
+    $('#unattend').addClass('hidden');
+    $('#attend').removeClass('hidden');
+    // <?php 
+    //   if($loggedIn) {
+    //     mysqli_query($con,"DELETE FROM attend
+    //      WHERE user = $user_session AND event = $event_id");
+    //   }
+    // ?>
+  }
+</script>
 
 </body>
 <?php include 'templates/includes/scripts.php' ?>
 </html>
+<?php
+mysqli_close($con);
+?>

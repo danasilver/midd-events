@@ -28,8 +28,6 @@ foreach ($events_array as $event) {
 
 $first_element = array_shift($events_with_photos);
 
-mysqli_close($con);
-
 ?>
 <!DOCTYPE html>
 <html>
