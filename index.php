@@ -18,13 +18,6 @@ while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {
   $events_array[] = $row;
 }
 
-//Get all organizations
-// $org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
-// $orgs = array();
-// while ($row = mysqli_fetch_array($org_results, MYSQLI_ASSOC)) {
-//   $orgs[] = $row['name'];
-// }
-
 // Get all events with photos
 $events_with_photos = array();
 foreach ($events_array as $event) {
@@ -33,13 +26,7 @@ foreach ($events_array as $event) {
   }
 }
 
-// // Get all categories
-// $cat_results = mysqli_query($con, "SELECT name FROM Categories ORDER BY name");
-// $cats = array();
-// while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
-//   $cats[] = $row['name'];
-// }
-
+$first_element = array_shift($events_with_photos);
 
 mysqli_close($con);
 
@@ -53,72 +40,57 @@ include "templates/includes/head.php"
 ?>
 <body>
 <?php include "templates/includes/navbar.php" ?>
-<div class="container">
-
-  <div id="events-carousel" class="carousel slide hidden-sm hidden-xs">
-    <ol class="carousel-indicators">
-    <?php
-    foreach (array_slice($events_with_photos, 0, 5) as $i=>$event) {
-    ?>
-      <li data-target="#events-carousel" data-slide-to="<?php echo $i; ?>" class="<?php if ($i == 0) { echo " active"; }; ?>"></li>
-    <?php
-    }
-    ?>
-    </ol>
-
-    <div class="carousel-inner">
-      <?php
-      foreach (array_slice($events_with_photos, 0, 5) as $i=>$event) {
-      ?>
-      <div class="item row<?php if ($i == 0) { echo " active"; }; ?>">
-        <div class="carousel-img-wrapper col-lg-6 col-md-6">
-          <img src="<?php echo $event['photo_url'] ?>" alt="<?php echo $event['title'] ?>">
-          <div class="img-overlay"></div>
-        </div>
-        <div class="carousel-description col-lg-6 col-md-6">
-          <h1><?php echo $event['title'] ?></h1>
-          <h2><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])) ?></h2>
-          <h2><?php echo $event['location'] ?></h2>
+<div class="jumbotron">
+      <div class="container">
+        <h4 class="hidden-lg hidden-md hidden-sm"><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
+        <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $first_element['location'] ?></h4>
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="event.php?event=<?php echo $first_element['id'] ?>"> 
+              <img width="100%" height="100%" src="<?php echo $first_element['photo_url'] ?>">
+            </a>
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-5">
+            <a href="event.php?event=<?php echo $first_element['id'] ?>"> 
+              <h2><?php echo $first_element['title'] ?></h2>
+            </a>
+            <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
+            <h4 class="hidden-xs"><?php echo $first_element['location'] ?></h4>
+            <h4>Created by: <?php echo $first_element['host'] ?></h4>
+            <p><?php echo $first_element['description'] ?></p>
+          </div>
         </div>
       </div>
-      <?php
-      }
-      ?>
+</div>
+
+<div class="container">
+  <div class="row">
+    <?php foreach ($events_with_photos as $thumbnail) { ?>
+  <div class="col-sm-3">
+    <div class="thumbnail thumbnail-home">
+      <div class="home-image-wrapper">
+        <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
+          <img src="<?php echo $thumbnail['photo_url'] ?>" alt="<?php echo $thumbnail['title'] ?>">
+        </a>
+      </div>
+      <div class="caption">
+          <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
+            <h3><?php echo $thumbnail['title']?> </h3> 
+          </a>
+            <h4 class="hidden-xs"><?php echo $thumbnail['location'] ?></h4>
+            <h5 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($thumbnail['event_date'])); ?></h5>
+            <p> <?php 
+            echo substr($thumbnail['description'], 0, 250);
+            if (strlen($thumbnail['description']) > 250){
+            echo '...';
+            };
+        ?></p>
+      </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-lg-4 col-md-4">
-      <h3>Upcoming Events</h3>
-      <ul>
-      <?php
-      foreach ($events_array as $event) {
-      ?>
-      <li>
-        <a href="event.php?event=<?php echo $event['id'] ?>">
-          <?php $phpdate = strtotime($event['event_date']) ?>
-
-          <strong><?php echo date('M j, Y', $phpdate) ?></strong>
-          &nbsp;<?php echo $event['title'] ?>
-        </a>
-      </li>
-      <?php
-      }
-      ?>
-      </ul>
-    </div>
-    <div class="col-lg-4 col-md-4 col-md-offset-4 col-md-offset-4">
-      <h3>Categories</h3>
-      <ul>
-      <?php foreach ($cats as $cat) { ?>
-      <li>
-        <a href="search.php?q=<?php echo $cat ?>">
-          <?php echo $cat ?>
-        </a>
-      </li>
-      <?php } ?>
-      </ul>
-    </div>
+  <?php
+  }
+  ?>
   </div>
 </div>
 <?php include 'templates/includes/scripts.php' ?>

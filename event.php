@@ -103,6 +103,7 @@ include "templates/includes/head.php";
     </div>
     <div class="col-lg-8 col-md-8 col-sm-8">
       <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
+      <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($event['end_date'])); ?></h4>
       <h4 class="hidden-xs"><?php echo $event['location'] ?></h4>
       <h4>Created by: <?php echo $event['host'] ?></h4>
       <h4>Organized by: <?php echo $e_org['org'] ?></h4>
@@ -175,14 +176,17 @@ include "templates/includes/head.php";
 
   <!-- Thumbnails for related events -->
 
-  <h2>Related Events</h2>
+  <h3>Related Events</h3>
 
   <div class="row">
     <?php foreach ($related_with_photos as $thumbnail) { ?>
   <div class="col-sm-3">
-    <div class="thumbnail">
-      <img src="<?php echo $thumbnail['photo_url'] ?>" 
-      alt="<?php echo $thumbnail['title'] ?>">
+    <div class="thumbnail thumbnail-home">
+      <div class="home-image-wrapper">
+        <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
+          <img src="<?php echo $thumbnail['photo_url'] ?>" alt="<?php echo $thumbnail['title'] ?>">
+        </a>
+      </div>
       <div class="caption">
           <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
             <h3><?php echo $thumbnail['title']?> </h3> </a>

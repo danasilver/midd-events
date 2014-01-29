@@ -28,11 +28,18 @@ $(document).ready(function() {
    *****************/
 
   // Datepicker
-  var newEventPicker = $("#newEventDate").datetimepicker({
+  $("#newEventDate").datetimepicker({
     language: 'en',
     pick12HourFormat: true,
     pickSeconds:false
   });
+
+  $("#newEventEndDate").datetimepicker({
+    language: 'en',
+    pick12HourFormat: true,
+    pickSeconds:false
+  });
+
 
   // Select 2
 

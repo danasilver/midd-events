@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// Redirect to homepage if not logged in
+if (!isset($_SESSION["username"])) {
+  header('Location: index.php');
+  die();
+}
+
 define('DB_SERVER', 'panther.cs.middlebury.edu');
 define('DB_USERNAME', 'dsilver');
 define('DB_PASSWORD', 'dsilver122193');
@@ -21,6 +28,7 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
 }
 
 $errors = array();
+$org_placeholder = "Active Minds";
 
 // POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -31,88 +39,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $data;
   }
 
-  $titleVal = clean_data($_POST['title']);
+  $event_title = clean_data($_POST['title']);
   $desc = clean_data($_POST['description']);
   $photo_url = clean_data($_POST['photo_url']);
   $location = clean_data($_POST['location']);
   $date = clean_data($_POST['event_date']);
+  $end_date = clean_data($_POST['end_date']);
+  $org = $org_placeholder = clean_data($_POST["org"]);
   $categories = array();
   $categories = $_POST['cats'];
-  $org = clean_data($_POST["org"]);
 
-  empty($titleVal) && $errors["title"] = "This field is required.";
+  $host = $_SESSION["username"];
+
+  empty($event_title) && $errors["title"] = "This field is required.";
   empty($desc) && $errors["desc"] = "This field is required.";
   empty($photo_url) && $errors["photo_url"] = "This field is required.";
   empty($location) && $errors["location"] = "This field is required.";
   empty($date) && $errors["date"] = "This field is required.";
+  empty($org) && $errors["org"] = "This field is required.";
   empty($categories) && $errors["categories"] = "This field is required.";
+  empty($end_date) && $errors["end_date"] = "This field is required.";
 
   if (empty($errors)) {
-    $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, host)
-      VALUES
-      (?, ?, ?, ?, ?, ?)");
+    // Insert event
+    $event_stmt = $con->prepare("INSERT INTO Events 
+                                 (title, description, photo_url, location, event_date, end_date, host)
+                                 VALUES
+                                 (?, ?, ?, ?, ?, ?, ?)");
 
-    if (!$stmt)  {
-      echo "First prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    if (!$event_stmt)  {
+      echo "Event insert prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$event_stmt->bind_param('sssssss', $event_title, 
+                                           $desc, 
+                                           $photo_url, 
+                                           $location, 
+                                           date("Y-m-d H:i:s", strtotime($date)),
+                                           date("Y-m-d H:i:s", strtotime($end_date)), 
+                                           $host))
+    {
+      echo "Event insert binding failed: (" . $stmt->errno . ") " . $stmt->error;
     }
 
-
-    if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, date("Y-m-d H:i:s", strtotime($date)), $host)) {
-      echo "First binding failed: " . $stmt->errno . $stmt->error;
+    if (!$event_stmt->execute()) {
+      echo "Execute failed: " . $event_stmt->errno . $event_stmt->error;
     }
 
-    function insert_category($cat) {
-      global $con;
-      global $eventid;
-      $cat = htmlspecialchars($cat);
-      $stmt2 = $con->prepare("INSERT INTO categorized_in (event, category)
-      VALUES
-      (?, ?)");
-
-      if (!$stmt2) {
-        echo "Second prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
-      }
-
-      if (!$stmt2->bind_param('is', $eventid, $cat)) {
-        echo "Second binding failed: " . $stmt2->errno . $stmt2->error;
-      }
-
-      if (!$stmt2->execute()) {
-          echo "Execute failed: " . $stmt2->errno . $stmt2->error;
-      }
-
-      $stmt2->close();
-    }
-
-    $host = $_SESSION["username"];
-
-    if (!$stmt->execute()) {
-      echo "Execute failed: " . $stmt->errno . $stmt->error;
-    }
+    // Get eventid for category and organization inserts
     $eventid = $con->insert_id;
-    $stmt->close();
 
-    $org = htmlspecialchars($_POST["org"]);
-    $stmt3 = $con->prepare("INSERT INTO organizer (org, event)
-    VALUES
-    (?, ?)");
+    $event_stmt->close();
 
-    if (!$stmt3)  {
-        echo "Third prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    // Insert categories
+    $cats_stmt = $con->prepare("INSERT INTO categorized_in (event, category) VALUES (?, ?)");
+    if (!$cats_stmt) {
+      echo "Cats insert statement failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
-    if (!$stmt3->bind_param('si', $org, $eventid)) {
-      echo "Third binding failed: " . $stmt3->errno . $stmt3->error;
-    }
-    if (!$stmt3->execute()) {
-        echo "Execute failed: " . $stmt3->errno . $stmt3->error;
+    foreach ($categories as $cat) {
+      if (!$cats_stmt->bind_param('is', $eventid, $cat)) {
+        echo "Cats insert binding failed: (" . $stmt->errno . ") " . $stmt->error;
       }
 
-    $stmt3->close();
-
-    foreach ($categories as $category) {
-      insert_category($category);
+      if (!$cats_stmt->execute()) {
+        echo "Execute failed: " . $cats_stmt->errno . $cats_stmt->error;
+      }
     }
+    $cats_stmt->close();
 
+    // Insert organization
+    $org_stmt = $con->prepare("INSERT INTO organizer (org, event) VALUES (?, ?)");
+
+    if (!$org_stmt)  {
+        echo "Org insert prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$org_stmt->bind_param('si', $org, $eventid)) {
+      echo "Org insert binding failed: " . $org_stmt->errno . $org_stmt->error;
+    }
+    if (!$org_stmt->execute()) {
+        echo "Execute failed: " . $org_stmt->errno . $org_stmt->error;
+    }
+    $org_stmt->close();
 
     header('Location: ' . 'event.php?event=' . $eventid);
     die();
@@ -133,7 +139,6 @@ include "templates/includes/head.php"
 <?php include "templates/includes/navbar.php" ?>
 <div class="container">
   <h2>Create a new event</h2>
-  <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
     <!-- Title -->
     <div class="form-group<?php if (array_key_exists("title", $errors)) { echo " has-error"; } ?>">
@@ -161,8 +166,8 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="org">Organization</label>
         <div class="col-sm-4">
           <select id="newEventOrg" name="org">
-          <?php foreach ($orgs as $org) { ?>
-            <option><?php echo $org ?></option>
+          <?php foreach ($orgs as $organization) { ?>
+            <option <?php if ($organization == $org_placeholder ) { echo "selected"; } ?>> <?php echo $organization ?></option>
           <?php } ?>
           </select>
         </div>
@@ -186,10 +191,25 @@ include "templates/includes/head.php"
     <!-- Date -->
     <div id="newEventDate" class="form-group<?php if (array_key_exists("date", $errors)) { echo " has-error"; } ?>">
       <div class="row">
-        <label class="col-sm-2 control-label" for="date">Date</label>
+        <label class="col-sm-2 control-label" for="date">Start Date</label>
         <div class="col-sm-4">
           <div class="input-group">
             <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Date -->
+    <div id="newEventEndDate" class="form-group<?php if (array_key_exists("end_date", $errors)) { echo " has-error"; } ?>">
+      <div class="row">
+        <label class="col-sm-2 control-label" for="end_date">End Date</label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="end_date" id="end_date" class="form-control" maxlength="30" value="<?php echo $end_date;?>">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
