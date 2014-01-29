@@ -23,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 
 $attend_count_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $event_id");
-$attend_count = mysqli_fetch_array($attend_count_query)[0];
+$attend_count = mysqli_fetch_array($attend_count_query);
+$attend_count = $attend_count[0];
 
 $user_attending = false;
 if (isset($_SESSION["username"])) {
