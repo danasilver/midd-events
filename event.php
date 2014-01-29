@@ -157,19 +157,19 @@ include "templates/includes/head.php";
   function attend(){
     $('#attend').addClass('hidden');
     $('#unattend').removeClass('hidden');
-    // <?php 
-    //       mysqli_query($con,"INSERT INTO attend (user, event) VALUES ($user_session, $event_id)");
-    // ?>
+    <?php 
+          mysqli_query($con,"INSERT INTO attend (user, event) VALUES ($user_session, $event_id)");
+    ?>
   }
   function unattend(){
     $('#unattend').addClass('hidden');
     $('#attend').removeClass('hidden');
-    // <?php 
-    //   if($loggedIn) {
-    //     mysqli_query($con,"DELETE FROM attend
-    //      WHERE user = $user_session AND event = $event_id");
-    //   }
-    // ?>
+    <?php 
+      if($loggedIn) {
+        mysqli_query($con,"DELETE FROM attend
+         WHERE user = $user_session AND event = $event_id");
+      }
+    ?>
   }
 </script>
 
