@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $data;
   }
 
-  $titleErr = $descErr = $photo_urlErr = $locationErr = $dateErr = "";
+  $titleErr = $descErr = $photo_urlErr = $locationErr = $dateErr = $errorMessage = "";
   $titleBoo = $descBoo = $photo_urlBoo = $locationBoo = $dateBoo = false;
 
   $title = clean_data($_POST['title']);
@@ -37,43 +37,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $photo_url = clean_data($_POST['photo_url']);
   $location = clean_data($_POST['location']);
   $date = clean_data($_POST['event_date']);
+  $categories = array();
+  $categories = $_POST['cats'];
 
   if (empty($title)) {
-    $titleErr = "Title is required";
+    $titleErr = "This field is required.";
   }
   else {
     $titleBoo = true;
   }
 
   if (empty($desc)) {
-    $descErr = "Description is required";
+    $descErr = "This field is required.";
   }
   else {
     $descBoo = true;
   }
 
   if (empty($photo_url)) {
-    $photo_urlErr = "Photo url is required";
+    $photo_urlErr = "This field is required.";
   }
   else {
     $photo_urlBoo = true;
   }
 
   if (empty($location)) {
-    $locationErr = "Location is required";
+    $locationErr = "This field is required.";
   }
   else {
     $locationBoo = true;
   }
 
   if (empty($date)) {
-    $dateErr = "Date is required";
+    $dateErr = "This field is required.";
   }
   else {
     $dateBoo = true;
   }
 
-  if ($titleBoo && $descBoo && $photo_urlBoo && $locationBoo && $dateBoo) {
+  $error = ($titleBoo && $descBoo && $photo_urlBoo && $locationBoo && $dateBoo);
+  if (!$error){
+    $errorMessage = "Please select Categories";
+  }
+
+  if ($error) {
     $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, host)
       VALUES
       (?, ?, ?, ?, ?, ?)");
@@ -111,8 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $host = "chucknorris"; # change to current user
-    $categories = array();
-    $categories = $_POST['cats'];
 
     if (!$stmt->execute()) {
       echo "Execute failed: " . $stmt->errno . $stmt->error;
@@ -168,6 +173,7 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
           <input type="text" class="form-control" name="title" id="title" maxlength="30" value="<?php echo $titleVal;?>">
+          <span class="help-block"><?php echo $titleErr; ?></span>
         </div>
       </div>
     </div>
@@ -178,6 +184,7 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
           <input type="text" name="location" id="location" class="form-control" maxlength="100" value="<?php echo $location;?>">
+          <span class="help-block"><?php echo $locationErr; ?></span>
         </div>
       </div>
     </div>
@@ -197,7 +204,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Categories -->
-    <div class="form-group form-group-category">
+    <div class="form-group form-group-category <?php if ($errorMessage) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="cats">Categories</label>
         <div class="col-sm-4" data-toggle="buttons">
@@ -207,6 +214,7 @@ include "templates/includes/head.php"
               <?php echo $cat ?>
             </label>
           <?php } ?>
+          <span class="help-block"><?php echo $errorMessage;?></span>
         </div>
       </div>
     </div>
@@ -217,6 +225,7 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
           <input type="url" name="photo_url" id="photo" class="form-control" maxlength="100" value="<?php echo $photo_url;?>">
+          <span class="help-block"><?php echo $photo_urlErr; ?></span>
         </div>
       </div>
     </div>
@@ -227,6 +236,7 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="date">Date</label>
         <div class="col-sm-4">
           <input type="date" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+          <span class="help-block"><?php echo $dateErr; ?></span>
         </div>
       </div>
     </div>
@@ -237,6 +247,7 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
           <textarea id="description" name="description" class="form-control" rows="5"><?php echo $desc;?></textarea>
+          <span class="help-block"><?php echo $descErr; ?></span>
         </div>
       </div>
     </div>
