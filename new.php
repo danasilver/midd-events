@@ -20,6 +20,8 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['name'];
 }
 
+$errors = array();
+
 // POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   function clean_data($data) {
@@ -29,59 +31,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $data;
   }
 
-  $titleErr = $descErr = $photo_urlErr = $locationErr = $dateErr = $errorMessage = "";
-  $titleBoo = $descBoo = $photo_urlBoo = $locationBoo = $dateBoo = false;
-
-  $title = clean_data($_POST['title']);
-  $titleVal = $title;
+  $titleVal = clean_data($_POST['title']);
   $desc = clean_data($_POST['description']);
   $photo_url = clean_data($_POST['photo_url']);
   $location = clean_data($_POST['location']);
   $date = clean_data($_POST['event_date']);
   $categories = array();
   $categories = $_POST['cats'];
+  $org = clean_data($_POST["org"]);
 
-  if (empty($title)) {
-    $titleErr = "This field is required.";
-  }
-  else {
-    $titleBoo = true;
-  }
+  empty($titleVal) && $errors["title"] = "This field is required.";
+  empty($desc) && $errors["desc"] = "This field is required.";
+  empty($photo_url) && $errors["photo_url"] = "This field is required.";
+  empty($location) && $errors["location"] = "This field is required.";
+  empty($date) && $errors["date"] = "This field is required.";
+  empty($categories) && $errors["categories"] = "This field is required.";
 
-  if (empty($desc)) {
-    $descErr = "This field is required.";
-  }
-  else {
-    $descBoo = true;
-  }
-
-  if (empty($photo_url)) {
-    $photo_urlErr = "This field is required.";
-  }
-  else {
-    $photo_urlBoo = true;
-  }
-
-  if (empty($location)) {
-    $locationErr = "This field is required.";
-  }
-  else {
-    $locationBoo = true;
-  }
-
-  if (empty($date)) {
-    $dateErr = "This field is required.";
-  }
-  else {
-    $dateBoo = true;
-  }
-
-  $error = ($titleBoo && $descBoo && $photo_urlBoo && $locationBoo && $dateBoo);
-  if (!$error){
-    $errorMessage = "Please select Categories";
-  }
-
-  if ($error) {
+  if (empty($errors)) {
     $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, host)
       VALUES
       (?, ?, ?, ?, ?, ?)");
@@ -119,8 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $host = $_SESSION["username"];
-    $categories = array();
-    $categories = $_POST['cats'];
 
     if (!$stmt->execute()) {
       echo "Execute failed: " . $stmt->errno . $stmt->error;
@@ -172,7 +136,7 @@ include "templates/includes/head.php"
   <a href="index.php" class="btn btn-link" tabindex="-1">Back to search</a>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="form-horizontal col-sm-12 event-form" role="form" method="POST">
     <!-- Title -->
-    <div class="form-group<?php if ($titleErr) { echo " has-error"; } ?>">
+    <div class="form-group<?php if (array_key_exists("title", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
@@ -182,7 +146,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Location -->
-    <div class="form-group<?php if ($locationErr) { echo " has-error"; } ?>">
+    <div class="form-group<?php if (array_key_exists("location", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
@@ -206,7 +170,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Categories -->
-    <div class="form-group form-group-category <?php if ($errorMessage) { echo " has-error"; } ?>">
+    <div class="form-group form-group-category <?php if (array_key_exists("categories", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="cats">Categories</label>
         <div class="col-sm-4">
@@ -220,7 +184,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Date -->
-    <div id="newEventDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
+    <div id="newEventDate" class="form-group<?php if (array_key_exists("date", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="date">Date</label>
         <div class="col-sm-4">
@@ -235,7 +199,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Photo URL -->
-    <div id="newEventImg" class="form-group<?php if ($photo_urlErr) { echo " has-error"; } ?>">
+    <div id="newEventImg" class="form-group<?php if (array_key_exists("photo_url", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
@@ -256,7 +220,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- Description -->
-    <div class="form-group<?php if ($descErr) { echo " has-error"; } ?>">
+    <div class="form-group<?php if (array_key_exists("desc", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
