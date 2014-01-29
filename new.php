@@ -176,8 +176,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="title" id="title" maxlength="30" value="<?php echo $titleVal;?>">
-          <span class="help-block"><?php echo $titleErr; ?></span>
+          <input type="text" class="form-control" name="title" id="title" maxlength="30" value="">
         </div>
       </div>
     </div>
@@ -187,8 +186,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
-          <input type="text" name="location" id="location" class="form-control" maxlength="100" value="<?php echo $location;?>">
-          <span class="help-block"><?php echo $locationErr; ?></span>
+          <input type="text" name="location" id="location" class="form-control" maxlength="100" value="">
         </div>
       </div>
     </div>
@@ -216,7 +214,6 @@ include "templates/includes/head.php"
           <?php foreach ($cats as $cat) { ?>
             <option><?php echo $cat ?></option>
           <?php } ?>
-          <span class="help-block"><?php echo $errorMessage;?></span>
           </select>
         </div>
       </div>
@@ -233,7 +230,6 @@ include "templates/includes/head.php"
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
           </div>
-          <span class="help-block"><?php echo $dateErr; ?></span>
         </div>
       </div>
     </div>
@@ -243,9 +239,13 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
-          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="<?php echo $photo_url;?>" autocomplete="off">
-          <span class="help-block"><?php echo $photo_urlErr; ?></span>
+          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="" autocomplete="off">
         </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
         <div class="col-sm-4 col-sm-offset-2">
           <div id="newEventImgPreview">
             <div>Photo Preview</div>
@@ -260,8 +260,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
-          <textarea id="description" name="description" class="form-control" rows="5"><?php echo $desc;?></textarea>
-          <span class="help-block"><?php echo $descErr; ?></span>
+          <textarea id="description" name="description" class="form-control" rows="5"></textarea>
         </div>
       </div>
     </div>
