@@ -2,6 +2,32 @@
  * event.php
  ********************/
 
+/*homepage*/
+
+.jumbotron {
+  background-color: #FFFFFF;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.thumbnail-home {
+  height: 439px;
+  padding-bottom: 9px;
+  overflow: hidden;
+}
+
+.thumbnail-home .caption {
+  padding-bottom: 0;
+}
+
+.home-image-wrapper {
+  height: 190px;
+  overflow: hidden;
+}
+
+.home-image-wrapper img {
+  width: 100%;
+}
+
 .return-home {
   display: block;
   margin-bottom: 15px;

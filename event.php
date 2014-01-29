@@ -99,14 +99,17 @@ include "templates/includes/head.php";
   </div>
   <!-- Thumbnails for related events -->
 
-  <h2>Related Events</h2>
+  <h3>Related Events</h3>
 
   <div class="row">
     <?php foreach ($related_with_photos as $thumbnail) { ?>
   <div class="col-sm-3">
-    <div class="thumbnail">
-      <img src="<?php echo $thumbnail['photo_url'] ?>" 
-      alt="<?php echo $thumbnail['title'] ?>">
+    <div class="thumbnail thumbnail-home">
+      <div class="home-image-wrapper">
+        <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
+          <img src="<?php echo $thumbnail['photo_url'] ?>" alt="<?php echo $thumbnail['title'] ?>">
+        </a>
+      </div>
       <div class="caption">
           <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
             <h3><?php echo $thumbnail['title']?> </h3> </a>
