@@ -194,7 +194,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="orgs">Organization</label>
         <div class="col-sm-4">
-          <select name="orgs" class="form-control">
+          <select id="newEventOrg" name="orgs" class="form-control">
           <?php foreach ($orgs as $org) { ?>
             <option><?php echo $org ?></option>
           <?php } ?>
@@ -219,24 +219,35 @@ include "templates/includes/head.php"
       </div>
     </div>
 
-    <!-- Photo URL -->
-    <div class="form-group<?php if ($photo_urlErr) { echo " has-error"; } ?>">
+    <!-- Date -->
+    <div id="newEventDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
       <div class="row">
-        <label class="col-sm-2 control-label" for="photo">Photo URL</label>
+        <label class="col-sm-2 control-label" for="date">Date</label>
         <div class="col-sm-4">
-          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="100" value="<?php echo $photo_url;?>">
-          <span class="help-block"><?php echo $photo_urlErr; ?></span>
+          <div class="input-group">
+            <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+          </div>
+          <span class="help-block"><?php echo $dateErr; ?></span>
         </div>
       </div>
     </div>
 
-    <!-- Date -->
-    <div class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
+    <!-- Photo URL -->
+    <div id="newEventImg" class="form-group<?php if ($photo_urlErr) { echo " has-error"; } ?>">
       <div class="row">
-        <label class="col-sm-2 control-label" for="date">Date</label>
+        <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
-          <input type="date" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
-          <span class="help-block"><?php echo $dateErr; ?></span>
+          <input type="url" name="photo_url" id="photo" class="form-control" maxlength="2083" value="<?php echo $photo_url;?>" autocomplete="off">
+          <span class="help-block"><?php echo $photo_urlErr; ?></span>
+        </div>
+        <div class="col-sm-4 col-sm-offset-2">
+          <div id="newEventImgPreview">
+            <div>Photo Preview</div>
+            <img src="">
+          </div>
         </div>
       </div>
     </div>

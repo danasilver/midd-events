@@ -34,6 +34,7 @@ Version: 3.4.2 Timestamp: Mon Aug 12 15:04:12 PDT 2013
     padding: 0 0 0 8px;
     overflow: hidden;
     position: relative;
+    height: 100%;
 
     border: 1px solid #ccc;
     white-space: nowrap;
@@ -84,6 +85,7 @@ Version: 3.4.2 Timestamp: Mon Aug 12 15:04:12 PDT 2013
     margin-right: 26px;
     display: block;
     overflow: hidden;
+    padding: 3px 6px;
 
     white-space: nowrap;
 

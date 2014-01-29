@@ -21,13 +21,30 @@ $event_result = mysqli_query($con, "SELECT org FROM organizer WHERE event = $eve
 $e_org = mysqli_fetch_array($event_result);
 
 
-$related_events = array();
-foreach ($cates as $ecat) {
-  $related = mysqli_query($con, "SELECT * FROM Events E, categorized_in C 
-  WHERE E.id = C.event AND C.category = '$ecat' AND E.event_date >= now() AND E.id <> $event_id");
-  while ($row = mysqli_fetch_array($related, MYSQLI_ASSOC)) {
-  $related_events[] = $row;
+for ($i = 0; $i < count($cates); $i++) {
+  if ($i == 0) {
+    $related_query = "SELECT * 
+                      FROM Events E, categorized_in C 
+                      WHERE E.id = C.event 
+                      AND C.category = '$cates[$i]' 
+                      AND E.event_date >= now() 
+                      AND E.id <> $event_id";
+  } else {
+    $related_query = $related_query . " UNION 
+                      SELECT * 
+                      FROM Events E, categorized_in C 
+                      WHERE E.id = C.event 
+                      AND C.category = '$cates[$i]' 
+                      AND E.event_date >= now() 
+                      AND E.id <> $event_id";
   }
+}
+
+$related_events = array();
+$related = mysqli_query($con, $related_query);
+while ($row = mysqli_fetch_array($related, MYSQLI_ASSOC)) {
+$related_events[] = $row;
+  
 }
 
 $related_with_photos = array();
