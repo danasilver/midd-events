@@ -132,7 +132,7 @@ include "templates/includes/head.php";
       <ul class="list-unstyled list-inline">
       <?php foreach ($cates as $cat) { ?>
       <li>
-        <a href="search.php?q=<?php echo $cat ?>">
+        <a href="search.php?c%5B%5D=<?php echo $cat ?>">
           <?php echo $cat ?>
         </a>
       </li>

@@ -137,7 +137,7 @@ include "templates/includes/head.php"
 <div class="container">
   <div class="row">
     <form method="GET">
-    <input type="hidden" value="<?php echo $query ?>">
+    <input type="hidden" name="q" value="<?php echo $query ?>">
     <div class="col-md-3">
       <div id="navSearchStartDate" class="refine form-group">
         <label class="control-label">Start date</label>
