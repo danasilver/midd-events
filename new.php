@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $photo_url = clean_data($_POST['photo_url']);
   $location = clean_data($_POST['location']);
   $date = clean_data($_POST['event_date']);
+  $end_date = clean_data($_POST['end_date']);
   $categories = array();
   $categories = $_POST['cats'];
 
@@ -82,16 +83,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   if ($error) {
-    $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, host)
+    $stmt = $con->prepare("INSERT INTO Events (title, description, photo_url, location, event_date, end_date, host)
       VALUES
-      (?, ?, ?, ?, ?, ?)");
+      (?, ?, ?, ?, ?, ?, ?)");
 
     if (!$stmt)  {
       echo "First prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
 
 
-    if (!$stmt->bind_param('ssssss', $title, $desc, $photo_url, $location, date("Y-m-d H:i:s", strtotime($date)), $host)) {
+    if (!$stmt->bind_param('sssssss', $title, $desc, $photo_url, $location, date("Y-m-d H:i:s", strtotime($date)), date("Y-m-d H:i:s", strtotime($end_date)), $host)) {
       echo "First binding failed: " . $stmt->errno . $stmt->error;
     }
 
@@ -219,13 +220,28 @@ include "templates/includes/head.php"
       </div>
     </div>
 
-    <!-- Date -->
+    <!-- Start Date -->
     <div id="newEventDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
       <div class="row">
-        <label class="col-sm-2 control-label" for="date">Date</label>
+        <label class="col-sm-2 control-label" for="date">Start Date</label>
         <div class="col-sm-4">
           <div class="input-group">
             <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="event_date" id="date" class="form-control" maxlength="30" value="<?php echo $date;?>">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Date -->
+    <div id="newEventEndDate" class="form-group<?php if ($dateErr) { echo " has-error"; } ?>">
+      <div class="row">
+        <label class="col-sm-2 control-label" for="end_date">End Date</label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input data-format="MM/dd/yyyy HH:mm PP" type="text" name="end_date" id="end_date" class="form-control" maxlength="30" value="<?php echo $end_date;?>">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
