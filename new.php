@@ -28,6 +28,7 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
 }
 
 $errors = array();
+$org_placeholder = "Active Minds";
 
 // POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -44,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = clean_data($_POST['location']);
   $date = clean_data($_POST['event_date']);
   $end_date = clean_data($_POST['end_date']);
-  $org = clean_data($_POST["org"]);
+  $org = $org_placeholder = clean_data($_POST["org"]);
   $categories = array();
   $categories = $_POST['cats'];
 
@@ -165,8 +166,8 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="org">Organization</label>
         <div class="col-sm-4">
           <select id="newEventOrg" name="org">
-          <?php foreach ($orgs as $org) { ?>
-            <option><?php echo $org ?></option>
+          <?php foreach ($orgs as $organization) { ?>
+            <option <?php if ($organization == $org_placeholder ) { echo "selected"; } ?>> <?php echo $organization ?></option>
           <?php } ?>
           </select>
         </div>
