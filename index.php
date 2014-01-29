@@ -10,8 +10,8 @@ $con = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("
 // Get all events
 $events_results = mysqli_query($con, "SELECT *
                                       FROM Events
-                                      WHERE event_date >= now()
-                                      ORDER BY event_date ASC");
+                                      WHERE end_date >= now()
+                                      ORDER BY end_date ASC");
 
 $events_array = array();
 while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {

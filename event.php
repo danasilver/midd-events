@@ -114,7 +114,7 @@ include "templates/includes/head.php";
   </h2>
   </form>
   <h4 class="hidden-lg hidden-md hidden-sm">Starts <?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
-  <h4 class="hidden-lg hidden-md hidden-sm">Ends <?php echo $event['location']; ?></h4></h4>
+  <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location']; ?></h4></h4>
   <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-4">
       <img width="100%" height="100%" src="<?php echo $event['photo_url'] ?>">
