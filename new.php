@@ -203,7 +203,7 @@ include "templates/includes/head.php"
     </div>
 
     <!-- End Date -->
-    <div id="newEventEndDate" class="form-group<?php if (array_key_exists("date", $errors)) { echo " has-error"; } ?>">
+    <div id="newEventEndDate" class="form-group<?php if (array_key_exists("end_date", $errors)) { echo " has-error"; } ?>">
       <div class="row">
         <label class="col-sm-2 control-label" for="end_date">End Date</label>
         <div class="col-sm-4">
