@@ -91,7 +91,7 @@ $related_with_photos = array_slice($related_with_photos, 0, 5);
 <?php
 $title = $event['title'];
 
-include "templates/includes/head.php";
+include "templates/includes/head.php"
 ?>
 
 <body>

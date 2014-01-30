@@ -66,9 +66,10 @@ include '../templates/includes/head.php';
 ?>
 <body>
 <?php
+include "../templates/includes/navbar.php";
 $index_prefix = "../";
 $in_users = true;
-include "../templates/includes/navbar.php";
+
 ?>
 <div class="container">
   <h2>Log in</h2>

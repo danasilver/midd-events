@@ -62,7 +62,18 @@ if (!isset($in_users)) {
           <div class="col-md-3">
             <ul class="list-unstyled list-inline pull-right">
               <li><a href="<?php echo $index_prefix; ?>new.php" class="btn btn-primary">New Event</a></li>
-              <li><a href="<?php if (!$in_users) { echo "users/"; } ?>logout.php" class="btn btn-default"><span class="glyphicon glyphicon-off"></span></a></li>
+              <li> 
+                <!-- Drop down -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <?php echo $_SESSION["username"]; ?>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="<?php if (!$in_users) { echo "users/"; } ?>settings.php">Settings</a></li>
+                    <li><a href="<?php if (!$in_users) { echo "users/"; } ?>logout.php">Logout</a></li>
+                  </ul>
+                </div>
             </ul>
           </div>
           <?php } else { ?>
