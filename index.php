@@ -40,8 +40,6 @@ include "templates/includes/head.php"
 <?php include "templates/includes/navbar.php" ?>
 <div class="jumbotron">
       <div class="container">
-        <h4 class="hidden-lg hidden-md hidden-sm"><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
-        <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $first_element['location'] ?></h4>
         <div class="row">
           <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="event.php?event=<?php echo $first_element['id'] ?>"> 
@@ -52,8 +50,8 @@ include "templates/includes/head.php"
             <a href="event.php?event=<?php echo $first_element['id'] ?>"> 
               <h2><?php echo $first_element['title'] ?></h2>
             </a>
-            <h4 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
-            <h4 class="hidden-xs"><?php echo $first_element['location'] ?></h4>
+            <h4 class=""><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
+            <h4 class=""><?php echo $first_element['location'] ?></h4>
             <h4>Created by: <?php echo $first_element['host'] ?></h4>
             <p><?php echo $first_element['description'] ?></p>
           </div>
@@ -75,8 +73,8 @@ include "templates/includes/head.php"
           <a href="event.php?event=<?php echo $thumbnail['id'] ?>"> 
             <h3><?php echo $thumbnail['title']?> </h3> 
           </a>
-            <h4 class="hidden-xs"><?php echo $thumbnail['location'] ?></h4>
-            <h5 class="hidden-xs"><?php echo date('F j, Y \a\t g:i a', strtotime($thumbnail['event_date'])); ?></h5>
+            <h4 class=""><?php echo $thumbnail['location'] ?></h4>
+            <h5 class=""><?php echo date('F j, Y \a\t g:i a', strtotime($thumbnail['event_date'])); ?></h5>
             <p> <?php 
             echo substr($thumbnail['description'], 0, 250);
             if (strlen($thumbnail['description']) > 250){
