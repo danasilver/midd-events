@@ -4,6 +4,10 @@
 
 /*homepage*/
 
+ .hidden-lg {
+    display: none!important;
+  }
+
 .jumbotron {
   background-color: #FFFFFF;
   padding-top: 0;
