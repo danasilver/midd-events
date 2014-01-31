@@ -99,28 +99,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     empty($end_date) && $errors["end_date"] = "This field is required.";
 
     if (empty($errors)) {
-        // update event
 
+        // update event
         $update_stmt = $con->prepare("UPDATE Events SET title = ?,
                                                         description = ?,
                                                         location = ?,
                                                         event_date = ?,
-                                                        end_date = ?
+                                                        end_date = ?,
+                                                        photo_url = ?
                                                     WHERE id = ?");
-        $update_stmt->bind_param("sssssi", $event_title,
+        $update_stmt->bind_param("ssssssi", $event_title,
                                            $desc,
                                            $location,
                                            date('Y-m-d H:i:s', strtotime($date)),
                                            date('Y-m-d H:i:s', strtotime($end_date)),
+                                           $photo_url,
                                            $event_id);
         $update_stmt->execute();
         $update_stmt->close();
 
-        mysqli_query($con, "UPDATE organizer SET 'org'=? WHERE 'event'=$event_id");
+        // Update organizer
+        mysqli_query($con, "UPDATE organizer SET org = '$org' WHERE event = $event_id");
+
         mysqli_query($con, "DELETE FROM categorized_in WHERE event=$event_id ");
-        if(isset($photo_url)){
-            mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  photo_url = '$photo_url' WHERE  `Events`.`id` =$event_id");
-        }
 
         // Insert categories
         $cats_stmt = $con->prepare("INSERT INTO categorized_in (event, category) VALUES (?, ?)");
