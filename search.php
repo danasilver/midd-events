@@ -178,7 +178,7 @@ include "templates/includes/head.php"
     </div>
     </form>
     <div class="col-md-9">
-      <h2>Results for <a href="search.php?q=<?php echo $query ?>"><?php echo $query ?></a></h2>
+      <h2><?php if (!empty($query)) {echo "Results for ";}?> <a href="search.php?q=<?php echo $query ?>"><?php echo $query ?></a></h2>
       <p>
         <?php 
         if ($num_results == 0) {

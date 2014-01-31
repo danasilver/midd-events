@@ -158,7 +158,7 @@ include '../templates/includes/navbar.php';
       		<ul class="list-unstyled">
       		<?php foreach ($my_orgs as $my_org) { ?>
       	<li>
-        	<a href="search.php?c%5B%5D=<?php echo $my_org ?>">
+        	<a href="/search.php?c%5B%5D=<?php echo $my_org ?>">
           	<?php echo $my_org ?>
         	</a>
       	</li>
@@ -172,7 +172,7 @@ include '../templates/includes/navbar.php';
       		<ul class="list-unstyled">
       		<?php foreach ($my_cats as $my_cat) { ?>
       	<li>
-        	<a href="search.php?c%5B%5D=<?php echo $my_cat ?>">
+        	<a href="/search.php?c%5B%5D=<?php echo $my_cat ?>">
           	<?php echo $my_cat ?>
         	</a>
       	</li>
