@@ -5,3 +5,6 @@ PHP_PORT = 8000
 
 serve:
 	php $(PHP_OPTS) localhost:$(PHP_PORT)
+
+midd-events.zip:
+	zip -r midd-events.zip *

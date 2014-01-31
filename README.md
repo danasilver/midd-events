@@ -1,20 +1,12 @@
 ## Midd Events
 
-_Updated January 19, 2014_
+_Updated January 31, 2014_
 
-### Testing
+### Development
 
-You don't have to push to the Middlebury server everytime you want to test code.  In fact, you can run a local PHP development server.  From the project root directory, run:
+To start a local dev server, run `php -S localhost:8000` or `make serve`.
 
-```sh
-$ php -S localhost:8000
-```
-
-then visit `localhost:8000` in your web browser.
-
-### Organization
-
-Right now, I'm moving all the PHP files to the root of the project so we have kind of clean URLs (i.e. not /templates/event.php).  After we have a MVP we can add a router that serves files based on the URL.  This is how frameworks like Rails, Django, Flask, Sinatra, etc. work and use URLs without file extensions on the end.
+Deploy script to deploy to Midd CS server is at `script/deploy`.
 
 ### Setup
 
@@ -28,5 +20,4 @@ Welcome to the git repository for Midd Events.  Here are a few things to get set
 $ git clone https://github.com/danasilver/midd-events.git
 ```
 
- - `cd midd-events` and get to work!
 
