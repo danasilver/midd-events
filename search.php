@@ -71,19 +71,19 @@ if (!empty($start_date) && !empty($end_date)) {
   $start_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $start_date)));
   $end_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $end_date)));
   $sql_query = str_replace("[dates]", 
-              "AND event_date >= " . $start_date_sql . " AND end_date <= " . $end_date_sql, 
+              "AND event_date >= '" . $start_date_sql . "' AND end_date <= '" . $end_date_sql . "'", 
               $sql_query);
 }
 else if (!empty($start_date)) {
   $start_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $start_date)));
   $sql_query = str_replace("[dates]", 
-              "AND event_date >= " . $start_date_sql, 
+              "AND event_date >= '" . $start_date_sql . "'", 
               $sql_query);
 }
 else if (!empty($end_date)) {
   $end_date_sql = date("Y-m-d", strtotime(str_replace("%2F", "/", $end_date)));
   $sql_query = str_replace("[dates]", 
-              "AND end_date <= " . $end_date_sql, 
+              "AND end_date <= '" . $end_date_sql . "'", 
               $sql_query);
 }
 else {
