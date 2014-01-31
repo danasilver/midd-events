@@ -37,7 +37,15 @@ if (isset($_SESSION["username"])) {
 }
 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
-$event = mysqli_fetch_array($result);
+$event = array();
+
+if (mysqli_num_rows($result) > 0) {
+    $event = mysqli_fetch_array($result, MYSQLI_ASSOC);
+} else {
+    // $event_result is false, redirect to 404
+    header('Location: 404.php');
+    die();
+}
 
 $cat_results = mysqli_query($con, "SELECT category FROM categorized_in WHERE event = $event_id
 ORDER BY category");

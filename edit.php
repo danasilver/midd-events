@@ -15,13 +15,28 @@ define('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die("Could not connect.");
 
-
 $event_id = htmlspecialchars($_GET["event"]);
 
+// Get event info
+$event_result = mysqli_query($con,"SELECT * FROM Events WHERE id='$event_id'");
+$event = array();
 
 
-$event_result=mysqli_query($con,"SELECT * FROM Events WHERE id='$event_id'");
-$event = mysqli_fetch_array($event_result, MYSQLI_ASSOC);
+if (mysqli_num_rows($event_result) > 0) {
+    $event = mysqli_fetch_array($event_result, MYSQLI_ASSOC);
+} else {
+    // $event_result is false, redirect to 404
+    header('Location: 404.php');
+    die();
+}
+
+if ($_SESSION["username"] != $event["host"]) {
+    header('Location: ' . 'event.php?event=' . $event_id);
+    die();
+}
+
+$event["event_date"] = date('m/d/Y g:i A', strtotime($event["event_date"]));
+$event["end_date"] = date('m/d/Y g:i A', strtotime($event["end_date"]));
 
 $event_org_result=mysqli_query($con,"SELECT * FROM organizer WHERE event='$event_id'");
 $event_org = mysqli_fetch_array($event_org_result, MYSQLI_ASSOC);
@@ -31,11 +46,6 @@ $event_cat = array();
 while ($event_cat_row = mysqli_fetch_array($event_cat_result, MYSQLI_ASSOC)) {
     $event_cat[] = $event_cat_row['category'];
 }
-
-//If statement for whether person logged in is host and can edit
-
-
-
 
 // Get organizations and categories for form
 $org_results = mysqli_query($con, "SELECT name FROM Organizations ORDER BY name");
@@ -55,7 +65,7 @@ $org_placeholder = $event_org["org"];
 
 $event_title = $desc = $photo_url = $location = $date = $end_date = "";
 $categories = $event_cat;
-$photo_url=$event["photo_url"];
+$photo_url = $event["photo_url"];
 
 // POST request validation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -83,12 +93,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     empty($event_title) && $errors["event_title"] = "This field is required.";
     empty($desc) && $errors["desc"] = "This field is required.";
-
     empty($location) && $errors["location"] = "This field is required.";
     empty($date) && $errors["date"] = "This field is required.";
     empty($org) && $errors["org"] = "This field is required.";
     empty($categories) && $errors["categories"] = "This field is required.";
     empty($end_date) && $errors["end_date"] = "This field is required.";
+
+    echo $event_date;
+    echo $end_date;
 
     if (empty($errors)) {
         // update event
@@ -103,10 +115,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if(isset($photo_url)){
             mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  photo_url = '$photo_url' WHERE  `Events`.`id` =$event_id");
         }
-
-
-
-
 
         // Insert categories
         $cats_stmt = $con->prepare("INSERT INTO categorized_in (event, category) VALUES (?, ?)");
@@ -124,13 +132,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $cats_stmt->close();
 
-        header('Location: ' . 'event.php?event=' . $event_id);
-        die();
+        // header('Location: ' . 'event.php?event=' . $event_id);
+        // die();
     }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>

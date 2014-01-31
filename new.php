@@ -209,10 +209,10 @@ include "templates/includes/head.php"
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
-            <?php if (array_key_exists("date", $errors)) { ?>
-            <span class="help-block"><?php echo $errors["date"]; ?></span>
-            <?php } ?>
           </div>
+          <?php if (array_key_exists("date", $errors)) { ?>
+            <span class="help-block"><?php echo $errors["date"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
@@ -227,10 +227,10 @@ include "templates/includes/head.php"
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
-            <?php if (array_key_exists("end_date", $errors)) { ?>
-            <span class="help-block"><?php echo $errors["end_date"]; ?></span>
-            <?php } ?>
           </div>
+          <?php if (array_key_exists("end_date", $errors)) { ?>
+            <span class="help-block"><?php echo $errors["end_date"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
