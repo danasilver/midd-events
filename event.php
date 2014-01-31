@@ -109,6 +109,9 @@ include "templates/includes/head.php"
   <h2>
     <?php echo $event['title'] ?>
     <?php if (isset($_SESSION["username"])) { ?>
+      <?php if ($_SESSION["username"] == $event["host"]) { ?>
+        <a style="margin-left: 15px;" class="btn btn-default pull-right" href="edit.php?event=<?php echo $event['id']; ?>">Edit event</a>
+      <?php } ?>
       <?php if (!$user_attending) { ?>
         <input type="hidden" name="rsvp_action" value="attend">
         <button type="submit" class="btn btn-primary pull-right">Click to Attend</button>
