@@ -2,7 +2,6 @@
 ini_set('display_errors', 'On');
 session_start();
 
-// Redirect to homepage if not logged in
 if (!isset($_SESSION["username"])) {
     header('Location: index.php');
     die();
