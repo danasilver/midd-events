@@ -45,6 +45,19 @@ if (!empty($_POST['unfollow_cats'])){
   $unfollow_cats = $_POST['unfollow_cats'];
 }
 
+
+// Get all events created by user
+$events_results = mysqli_query($con, "SELECT *
+                                      FROM Events
+                                      WHERE end_date >= now()AND host= '$uname'
+                                      ORDER BY end_date ASC");
+
+$events_array = array();
+while ($row = mysqli_fetch_array($events_results, MYSQLI_ASSOC)) {
+    $events_array[] = $row;
+}
+
+
 // Insert follow orgs
 $forgs_stmt = $con->prepare("INSERT INTO follow_org (user, org) VALUES (?, ?)");
 if (!$forgs_stmt) {
@@ -225,9 +238,24 @@ include '../templates/includes/navbar.php';
   </form>
 
 
+    <!-- Show the Events the user has created -->
+    <div>
+        <h4><?php if (!empty($events_array)) { echo "Events You Have Created (click to edit)"; } ?></h4>
+        <ul class="list-unstyled">
+            <?php foreach ($events_array as $my_event) { ?>
+                <li>
+                    <a href="/midd-events/event.php?event=<?php echo $my_event["id"] ?>">
+                        <?php echo $my_event["title"] ?>
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+
+
 <!-- Show the Organizations the user follows -->
 	<div>
-			<h4><?php if (!empty($my_orgs)) { echo "Organizations I Follow"; } ?></h4>
+			<h4><?php if (!empty($my_orgs)) { echo "Organizations You Are Following"; } ?></h4>
       		<ul class="list-unstyled">
       		<?php foreach ($my_orgs as $my_org) { ?>
       	<li>
@@ -241,7 +269,7 @@ include '../templates/includes/navbar.php';
 
 <!-- Show the Categories the user follows -->
   	<div>
-			<h4><?php if (!empty($my_cats)) { echo "Categories I Follow"; } ?></h4>
+			<h4><?php if (!empty($my_cats)) { echo "Categories You Are Following"; } ?></h4>
       		<ul class="list-unstyled">
       		<?php foreach ($my_cats as $my_cat) { ?>
       	<li>
