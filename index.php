@@ -26,12 +26,31 @@ foreach ($events_array as $event) {
   }
 }
 
+// Finds the event with the most attendees and makes it the featured event
+$max = 0;
+$max_event = $events_with_photos[0];
+$num_events = count($events_with_photos);
+$index = 0;
 
-$first_element = array_shift($events_with_photos);
-$eid = $first_element['id'];
-$attend_count_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $eid");
-$attend_count = mysqli_fetch_array($attend_count_query);
-$attend_count = $attend_count[0];
+for ($i = 0; $i < $num_events; $i++) {
+  $current = $events_with_photos[$i];
+  $cid = $current['id'];
+  $max_attend_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $cid");
+  $max_attend = mysqli_fetch_array($max_attend_query);
+  $max_attend = $max_attend[0];
+
+  if ($max_attend >= $max) {
+    $max = $max_attend;
+    $max_event = $current;
+    $index = $i;
+  }
+}
+$first_element = $max_event;
+
+//Removes the featured event from $events_with_photos
+unset($events_with_photos[$index]);
+
+
 
 ?>
 <!DOCTYPE html>
@@ -57,7 +76,7 @@ include "templates/includes/head.php"
             </a>
             <h4 class=""><?php echo date('F j, Y \a\t g:i a', strtotime($first_element['event_date'])); ?></h4>
             <h4 class=""><?php echo $first_element['location'] ?></h4>
-            <h4 class=""><?php echo $attend_count ?> attendees</h4>
+            <h4 class=""><?php echo $max ?> attendees</h4>
             <h4>Created by: <?php echo $first_element['host'] ?></h4>
             <p><?php echo $first_element['description'] ?></p>
           </div>
