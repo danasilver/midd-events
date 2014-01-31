@@ -56,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   empty($event_title) && $errors["event_title"] = "This field is required.";
   empty($desc) && $errors["desc"] = "This field is required.";
-  empty($photo_url) && $errors["photo_url"] = "This field is required.";
   empty($location) && $errors["location"] = "This field is required.";
   empty($date) && $errors["date"] = "This field is required.";
   empty($org) && $errors["org"] = "This field is required.";
@@ -149,6 +148,9 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
           <input type="text" class="form-control" name="title" id="title" maxlength="30" value="<?php echo $event_title;?>">
+          <?php if (array_key_exists("event_title", $errors)) { ?>
+          <span class="help-block"><?php echo $errors["event_title"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
@@ -159,6 +161,9 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="location">Location</label>
         <div class="col-sm-4">
           <input type="text" name="location" id="location" class="form-control" maxlength="100" value="<?php echo $location;?>">
+          <?php if (array_key_exists("location", $errors)) { ?>
+          <span class="help-block"><?php echo $errors["location"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
@@ -187,6 +192,9 @@ include "templates/includes/head.php"
             <option <?php if (in_array($cat, $categories)) { echo "selected"; } ?>><?php echo $cat ?></option>
           <?php } ?>
           </select>
+          <?php if (array_key_exists("categories", $errors)) { ?>
+          <span class="help-block"><?php echo $errors["categories"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
@@ -201,6 +209,9 @@ include "templates/includes/head.php"
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
+            <?php if (array_key_exists("date", $errors)) { ?>
+            <span class="help-block"><?php echo $errors["date"]; ?></span>
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -216,13 +227,16 @@ include "templates/includes/head.php"
             <span class="input-group-btn">
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-calendar"></span></button>
             </span>
+            <?php if (array_key_exists("end_date", $errors)) { ?>
+            <span class="help-block"><?php echo $errors["end_date"]; ?></span>
+            <?php } ?>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Photo URL -->
-    <div id="newEventImg" class="form-group<?php if (array_key_exists("photo_url", $errors)) { echo " has-error"; } ?>">
+    <div id="newEventImg" class="form-group">
       <div class="row">
         <label class="col-sm-2 control-label" for="photo">Photo URL</label>
         <div class="col-sm-4">
@@ -248,6 +262,9 @@ include "templates/includes/head.php"
         <label class="col-sm-2 control-label" for="description">Description</label>
         <div class="col-sm-6">
           <textarea id="description" name="description" class="form-control" rows="5"><?php echo $desc;?></textarea>
+          <?php if (array_key_exists("desc", $errors)) { ?>
+          <span class="help-block"><?php echo $errors["desc"]; ?></span>
+          <?php } ?>
         </div>
       </div>
     </div>
