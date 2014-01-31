@@ -245,9 +245,7 @@ include '../templates/includes/navbar.php';
             <?php foreach ($events_array as $my_event) { ?>
                 <li>
 
-
-
-                    <a href="../event.php?event=<?php echo $my_event["id"] ?>">
+                    <a href="../edit.php?event=<?php echo $my_event["id"] ?>">
 
                         <?php echo $my_event["title"] ?>
                     </a>
