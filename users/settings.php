@@ -244,7 +244,11 @@ include '../templates/includes/navbar.php';
         <ul class="list-unstyled">
             <?php foreach ($events_array as $my_event) { ?>
                 <li>
-                    <a href="/midd-events/edit.php?event=<?php echo $my_event["id"] ?>">
+
+
+
+                    <a href="../event.php?event=<?php echo $my_event["id"] ?>">
+
                         <?php echo $my_event["title"] ?>
                     </a>
                 </li>
@@ -259,7 +263,7 @@ include '../templates/includes/navbar.php';
       		<ul class="list-unstyled">
       		<?php foreach ($my_orgs as $my_org) { ?>
       	<li>
-        	<a href="/search.php?c%5B%5D=<?php echo $my_org ?>">
+        	<a href="/search.php?o%5B%5D=<?php echo $my_org ?>">
           	<?php echo $my_org ?>
         	</a>
       	</li>
