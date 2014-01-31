@@ -16,9 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   if ($rsvp_action == "attend") {
     mysqli_query($con, "INSERT INTO attend (user, event) VALUES ('$uname', $event_id)");
+    header("Location: event.php?event=" . $event_id);
   }
   else if ($rsvp_action == "unattend") {
     mysqli_query($con, "DELETE FROM attend WHERE user = '$uname' AND event = '$event_id' LIMIT 1");
+    header("Location: event.php?event=" . $event_id);
   }
 }
 
@@ -109,15 +111,15 @@ include "templates/includes/head.php"
   <h2>
     <?php echo $event['title'] ?>
     <?php if (isset($_SESSION["username"])) { ?>
-      <?php if ($_SESSION["username"] == $event["host"]) { ?>
-        <a style="margin-left: 15px;" class="btn btn-default pull-right" href="edit.php?event=<?php echo $event['id']; ?>">Edit event</a>
-      <?php } ?>
       <?php if (!$user_attending) { ?>
         <input type="hidden" name="rsvp_action" value="attend">
         <button type="submit" class="btn btn-primary pull-right">Click to Attend</button>
       <?php } else { ?>
         <input type="hidden" name="rsvp_action" value="unattend">
         <button type="submit" class="btn btn-default pull-right">Click to Unattend</button>
+      <?php } ?>
+      <?php if ($_SESSION["username"] == $event["host"]) { ?>
+        <a class="btn btn-link pull-right" href="edit.php?event=<?php echo $event['id']; ?>">Edit event</a>
       <?php } ?>
     <?php } else { ?>
       <a class="btn btn-default pull-right" href="users/login.php">Login to RSVP</a>
