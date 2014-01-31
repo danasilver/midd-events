@@ -99,17 +99,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     empty($categories) && $errors["categories"] = "This field is required.";
     empty($end_date) && $errors["end_date"] = "This field is required.";
 
-    echo $event_date;
-    echo $end_date;
-
     if (empty($errors)) {
         // update event
 
-        mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  `title` =  '$event_title' WHERE  `Events`.`id` =$event_id");
-        mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  description = '$desc' WHERE  `Events`.`id` =$event_id");
-        mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  location = '$location' WHERE  `Events`.`id` =$event_id");
-        mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  event_date = date('Y-m-d H:i:s', strtotime($date)) WHERE  `Events`.`id` =$event_id");
-        mysqli_query($con, "UPDATE  `dsilver_EventsCalendar`.`Events` SET  end_date = date('Y-m-d H:i:s', strtotime($end_date)) WHERE  `Events`.`id` =$event_id");
+        $update_stmt = $con->prepare("UPDATE Events SET title = ?,
+                                                        description = ?,
+                                                        location = ?,
+                                                        event_date = ?,
+                                                        end_date = ?
+                                                    WHERE id = ?");
+        $update_stmt->bind_param("sssssi", $event_title,
+                                           $desc,
+                                           $location,
+                                           date('Y-m-d H:i:s', strtotime($date)),
+                                           date('Y-m-d H:i:s', strtotime($end_date)),
+                                           $event_id);
+        $update_stmt->execute();
+        $update_stmt->close();
+
         mysqli_query($con, "UPDATE organizer SET 'org'=? WHERE 'event'=$event_id");
         mysqli_query($con, "DELETE FROM categorized_in WHERE event=$event_id ");
         if(isset($photo_url)){
@@ -132,8 +139,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $cats_stmt->close();
 
-        // header('Location: ' . 'event.php?event=' . $event_id);
-        // die();
+        header('Location: ' . 'event.php?event=' . $event_id);
+        die();
     }
 }
 ?>
