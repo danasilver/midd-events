@@ -61,6 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   empty($org) && $errors["org"] = "This field is required.";
   empty($categories) && $errors["categories"] = "This field is required.";
   empty($end_date) && $errors["end_date"] = "This field is required.";
+  if (strtotime($date) > strtotime($end_date)) {
+    $errors["date"] = "Start date must be before End date.";
+  }
 
   if (empty($errors)) {
     // Insert event
