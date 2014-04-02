@@ -14,14 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   $uname = $_SESSION["username"];
   $rsvp_action = $_POST["rsvp_action"];
 
-  if ($rsvp_action == "attend") {
-    mysqli_query($con, "INSERT INTO attend (user, event) VALUES ('$uname', $event_id)");
-    header("Location: event.php?event=" . $event_id);
-  }
-  else if ($rsvp_action == "unattend") {
-    mysqli_query($con, "DELETE FROM attend WHERE user = '$uname' AND event = '$event_id' LIMIT 1");
-    header("Location: event.php?event=" . $event_id);
-  }
+    if ($rsvp_action == "attend") {
+      mysqli_query($con, "INSERT INTO attend (user, event) VALUES ('$uname', $event_id)");
+      header("Location: event.php?event=" . $event_id);
+    }
+    else if ($rsvp_action == "unattend") {
+      mysqli_query($con, "DELETE FROM attend WHERE user = '$uname' AND event = '$event_id' LIMIT 1");
+      header("Location: event.php?event=" . $event_id);
+    }
+  
+    $flag_action = $_POST["flag_action"];
+    if ($flag_action == "flag") {
+      mysqli_query($con, "UPDATE Events SET flagged = '1', flagged_by = '$uname' WHERE id = '$event_id'");
+    } else if ($flag_action == "unflag"){
+      mysqli_query($con, "UPDATE Events SET flagged = '0', flagged_by = NULL WHERE id = '$event_id'");
+    }
 }
 
 $attend_count_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $event_id");
@@ -36,6 +43,14 @@ if (isset($_SESSION["username"])) {
   if (!empty($user_attending_result)) {
     $user_attending = true;
   }
+}
+$is_flagged = false;
+$is_flagged_query = mysqli_query($con, "SELECT flagged FROM Events WHERE id = '$event_id'");
+$is_flagged_result = mysqli_fetch_array($is_flagged_query);
+if ($is_flagged_result["flagged"] == 1) {
+  $is_flagged = true;
+} else {
+  $is_flagged = false;
 }
 
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
@@ -126,6 +141,19 @@ include "templates/includes/head.php"
     <?php } ?>
   </h2>
   </form>
+  <div>
+    <form method = "POST">
+    <?php if (isset($_SESSION["username"])) { 
+            if (!$is_flagged) {?>
+        <input type ="hidden" name="flag_action" value="flag">
+        <button type="submit" class="btn btn-danger pull-right">Flag this Event</button>
+        <?php } else {?>
+        <input type ="hidden" name="flag_action" value="unflag">
+        <button type="submit" class="btn btn-danger pull-right">Unflag this Event</button>
+      <?php }
+      } ?>
+    </form>
+    </div>
   <h4 class="hidden-lg hidden-md hidden-sm">Starts <?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location']; ?></h4></h4>
   <div class="row">

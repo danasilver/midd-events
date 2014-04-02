@@ -7,6 +7,25 @@ define ('DB_DATABASE', 'dsilver_EventsCalendar');
 
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
+
+$flagged_results = mysqli_query($con, "SELECT *
+                                      FROM Events
+                                      WHERE flagged = '1'
+                                      ORDER BY end_date ASC");
+
+$flagged_array = array();
+while ($row = mysqli_fetch_array($flagged_results, MYSQLI_ASSOC)) {
+  $flagged_array[] = $row;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+  $uname = $_SESSION["username"];
+  $flag_action = $_POST["flag_action"];
+    if ($flag_action == "unflag") {
+      mysqli_query($con, "UPDATE Events SET flagged = '0', flagged_by = 'NULL' WHERE id = '$event_id'");
+    }
+}
+
 $con->close();
 
 ?>
@@ -32,6 +51,18 @@ include '../templates/includes/navbar.php';
 <div class="container">
 	<h2>Admin Page</h2>
 	<h3>Flagged Events</h3>
+
+	<h4><?php if (empty($flagged_array)) { echo "There are no flagged events"; } ?></h4>
+      <ul class="list-unstyled">
+      <?php foreach ($flagged_array as $f_event) { ?>
+      <li>
+        <a href="../event.php?event=<?php echo $f_event["id"] ?>">
+          <?php echo $f_event["title"] ?>
+        </a>
+      </li>
+      <?php } ?>
+     
+      </ul>
 
 </div>
 <?php include '../templates/includes/scripts.php'?>
