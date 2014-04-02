@@ -14,6 +14,18 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
   $cats[] = $row['name'];
 }
 
+
+//Check to see if user is an admin
+$uname = $_SESSION["username"];
+$is_admin = false;
+$isadmin_query = mysqli_query($con, "SELECT is_admin FROM Users WHERE username = '$uname'");
+$isadmin_result = mysqli_fetch_array($isadmin_query);
+if ($isadmin_result['is_admin'] == 0){
+  $is_admin = false;
+} else {
+  $is_admin = true;
+}
+
 if (!isset($index_prefix)) {
   $index_prefix = "";
 }
@@ -70,8 +82,11 @@ if (!isset($in_users)) {
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="<?php if (!$in_users) { echo "users/"; } ?>settings.php">Settings</a></li>
+                    <li><a href="<?php if (!$in_users) { echo "users/"; } ?>settings.php">Settings</a></li> 
                     <li><a href="<?php if (!$in_users) { echo "users/"; } ?>logout.php">Logout</a></li>
+                    <?php if ($is_admin) { ?>
+                    <li><a href="<?php if (!$in_users) { echo "users/"; } ?>admin.php">Admin</a></li>
+                    <?php }?>
                   </ul>
                 </div>
             </ul>

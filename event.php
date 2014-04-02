@@ -53,6 +53,12 @@ if ($is_flagged_result["flagged"] == 1) {
   $is_flagged = false;
 }
 
+
+if (!$is_admin == 0 && $is_flagged){
+  header('Location: index.php');
+  die();
+}
+
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
 $event = array();
 
