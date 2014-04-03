@@ -30,6 +30,7 @@ $flagged_results = mysqli_query($con, "SELECT *
                                       FROM Events
                                       WHERE flagged = '1'
                                       AND end_date >= now()
+                                      AND flagged_mod != NULL
                                       ORDER BY end_date ASC");
 
 $flagged_array = array();
@@ -37,13 +38,6 @@ while ($row = mysqli_fetch_array($flagged_results, MYSQLI_ASSOC)) {
   $flagged_array[] = $row;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-  $uname = $_SESSION["username"];
-  $flag_action = $_POST["flag_action"];
-    if ($flag_action == "unflag") {
-      mysqli_query($con, "UPDATE Events SET flagged = '0', flagged_by = 'NULL' WHERE id = '$event_id'");
-    }
-}
 
 $con->close();
 

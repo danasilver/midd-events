@@ -31,6 +31,7 @@ $sql_query = "SELECT E.*
           [cats]
           [orgs]
           [dates]
+          AND E.flagged = '0'
 
           UNION
           SELECT E.*
@@ -39,6 +40,7 @@ $sql_query = "SELECT E.*
           [cats]
           [orgs]
           [dates]
+          AND E.flagged = '0'
 
           UNION
           SELECT E.*
@@ -47,6 +49,7 @@ $sql_query = "SELECT E.*
           [cats]
           [orgs]
           [dates]
+          AND E.flagged = '0'
 
           ORDER BY event_date ASC";
 

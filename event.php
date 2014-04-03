@@ -31,6 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } else if ($flag_action == "unflag"){
       mysqli_query($con, "UPDATE Events SET flagged = '0', flagged_by = NULL WHERE id = '$event_id'");
     }
+
+    $mod_flag_action = $_POST["mod_flag_action"];
+    if ($mod_flag_action == "mod_flag") {
+      mysqli_query($con, "UPDATE Events SET flagged_mod = '$uname' WHERE id = '$event_id'");
+    } 
 }
 
 $attend_count_query = mysqli_query($con, "SELECT COUNT(user) FROM attend WHERE event = $event_id");
@@ -46,21 +51,9 @@ if (isset($_SESSION["username"])) {
     $user_attending = true;
   }
 }
+
 $is_flagged = false;
-$is_flagged_query = mysqli_query($con, "SELECT flagged FROM Events WHERE id = '$event_id'");
-$is_flagged_result = mysqli_fetch_array($is_flagged_query);
-if ($is_flagged_result["flagged"] == 1) {
-  $is_flagged = true;
-} else {
-  $is_flagged = false;
-}
-
-
-if (!$is_admin && $is_flagged){
-  header('Location: index.php');
-  die();
-}
-
+$is_mod_flagged = false;
 $result = mysqli_query($con, "SELECT * FROM Events WHERE $event_id = id");
 $event = array();
 
@@ -71,6 +64,26 @@ if (mysqli_num_rows($result) > 0) {
     header('Location: 404.php');
     die();
 }
+
+if ($event["flagged"] == 1) {
+  $is_flagged = true;
+} else {
+  $is_flagged = false;
+}
+if ($event["flagged_mod"] != ''){
+    $is_mod_flagged = true;
+} 
+
+
+if (!$is_admin && $is_flagged){
+  header('Location: index.php');
+  die();
+} else if ($is_mod_flagged) {
+  header('Location: index.php');
+  die();
+}
+
+
 
 $cat_results = mysqli_query($con, "SELECT category FROM categorized_in WHERE event = $event_id
 ORDER BY category");
@@ -158,10 +171,19 @@ include "templates/includes/head.php"
         <?php } else {?>
         <input type ="hidden" name="flag_action" value="unflag">
         <button type="submit" class="btn btn-danger pull-right">Unflag this Event</button>
-      <?php }
-      } ?>
+      <?php }?>
     </form>
     </div>
+    <!-- handling mod flag -->
+  <div>
+  <form method = "POST">
+  <?php if ($is_flagged) {?> 
+        <input type ="hidden" name="mod_flag_action" value="mod_flag">
+        <button type="submit" class="btn btn-danger pull-right">Mod Flag</button>
+  <?php }
+  }?>
+
+
   <h4 class="hidden-lg hidden-md hidden-sm">Starts <?php echo date('F j, Y \a\t g:i a', strtotime($event['event_date'])); ?></h4>
   <h4 class="hidden-lg hidden-md hidden-sm"><?php echo $event['location']; ?></h4></h4>
   <div class="row">
