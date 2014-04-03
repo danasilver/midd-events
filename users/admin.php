@@ -9,16 +9,17 @@ define ('DB_DATABASE', 'dsilver_EventsCalendar');
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
 $uname = $_SESSION["username"];
+include "../templates/includes/isadmin.php";
 
 // Redirect user if they are not an admin
- $is_admin = false;
+ /*$is_admin = false;
  $isadmin_query = mysqli_query($con, "SELECT is_admin FROM Users WHERE username = '$uname'");
  $isadmin_result = mysqli_fetch_array($isadmin_query);
  if ($isadmin_result['is_admin'] == 0){
    $is_admin = false;
  } else {
    $is_admin = true;
- }
+ }*/
 if (!$is_admin){
   header('Location: ../index.php');
   die();

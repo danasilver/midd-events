@@ -17,14 +17,15 @@ while ($row = mysqli_fetch_array($cat_results, MYSQLI_ASSOC)) {
 
 //Check to see if user is an admin
 $uname = $_SESSION["username"];
-$is_admin = false;
+include "templates/includes/isadmin.php";
+/*global $is_admin;
 $isadmin_query = mysqli_query($con, "SELECT is_admin FROM Users WHERE username = '$uname'");
 $isadmin_result = mysqli_fetch_array($isadmin_query);
 if ($isadmin_result['is_admin'] == 0){
   $is_admin = false;
 } else {
   $is_admin = true;
-}
+}*/
 
 if (!isset($index_prefix)) {
   $index_prefix = "";

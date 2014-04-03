@@ -8,6 +8,8 @@ define ('DB_DATABASE', 'dsilver_EventsCalendar');
 $con = mysqli_connect (DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE) or die ("Could not connect");
 
 $event_id = htmlspecialchars($_GET["event"]);
+include "templates/includes/isadmin.php";
+
 
 // If attend/unattend post request
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -54,7 +56,7 @@ if ($is_flagged_result["flagged"] == 1) {
 }
 
 
-if (!$is_admin == 0 && $is_flagged){
+if (!$is_admin && $is_flagged){
   header('Location: index.php');
   die();
 }
