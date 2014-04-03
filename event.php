@@ -101,7 +101,8 @@ for ($i = 0; $i < count($cates); $i++) {
                       FROM Events E, categorized_in C 
                       WHERE E.id = C.event 
                       AND C.category = '$cates[$i]' 
-                      AND E.event_date >= now() 
+                      AND E.event_date >= now()
+                      AND E.flagged = '0' 
                       AND E.id <> $event_id";
   } else {
     $related_query = $related_query . " UNION 
@@ -109,7 +110,8 @@ for ($i = 0; $i < count($cates); $i++) {
                       FROM Events E, categorized_in C 
                       WHERE E.id = C.event 
                       AND C.category = '$cates[$i]' 
-                      AND E.event_date >= now() 
+                      AND E.event_date >= now()
+                      AND E.flagged = '0' 
                       AND E.id <> $event_id";
   }
 }
