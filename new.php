@@ -150,7 +150,7 @@ include "templates/includes/head.php"
       <div class="row">
         <label class="col-sm-2 control-label" for="title">Title</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="title" id="title" maxlength="30" value="<?php echo $event_title;?>">
+          <input type="text" class="form-control" name="title" id="title" maxlength="255" value="<?php echo $event_title;?>">
           <?php if (array_key_exists("event_title", $errors)) { ?>
           <span class="help-block"><?php echo $errors["event_title"]; ?></span>
           <?php } ?>
